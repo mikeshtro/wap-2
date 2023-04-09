@@ -1,0 +1,84 @@
+.App {
+    background-color: #202124;
+    height: 100vh;
+    display: flex;
+    align-items: flex-start;
+}
+
+.container {
+    margin: 10px;
+    background-color: #323639;
+    border-radius: 20px;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+}
+
+.right {
+    margin: 10px;
+    background-color: #323639;
+    border-radius: 20px;
+    display: flex;
+    flex-flow: column;
+    overflow: hidden;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    flex-flow: row;
+    overflow: hidden;
+    justify-content: space-between;
+}
+
+.header {
+    color: white;
+    padding: 20px;
+    margin: 0px;
+}
+
+.headerPrim {
+    color: white;
+    padding: 20px;
+    margin: 0px;
+    background-color: #4688F4;
+}
+
+.selectButton {
+    color: white;
+    padding: 20px;
+    border: 0px;
+    background-color: transparent;
+}
+
+.selectButtonSelected{
+    color: white;
+    padding: 20px;
+    border: 0px;
+    background-color: #4688F4;
+}
+
+
+.selectButton:hover {
+    background-color: #202124;
+}
+
+.selectButtonSelected:hover{
+    background-color: #3D6EC9;
+}
+
+.dltButton {
+    margin: 10px;
+    width: 200px;
+    color: #E64A39;
+    padding: 10px;
+    border: 0px;
+    border-radius: 20px;
+    background-color: #202124;
+}
+
+.dltButton:disabled {
+    color: #e64a394f;
+    background-color: #949494;
+}
+

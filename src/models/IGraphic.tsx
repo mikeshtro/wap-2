@@ -1,3 +1,5 @@
+import { GraphicType } from "./enums"
+
 export interface IGraphic {
     x: number,
     y: number,
@@ -7,6 +9,11 @@ export interface IGraphic {
     boundingRect: BoundingRect
 }
 
+export interface Position {
+    x: number,
+    y: number
+}
+
 interface BoundingRect {
     x1: number,
     x2: number,
@@ -14,8 +21,3 @@ interface BoundingRect {
     y2: number,
 }
 
-export enum GraphicType {
-    Wall,
-    Finish,
-    Robot
-}
