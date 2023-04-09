@@ -7,9 +7,11 @@ interface props {
     removeTrigger : number,
     operation: OperationType,
     callSelected(graphic : IGraphic | null) : void,
+    selectedOptionWidth : number,
+    selectedOptionHeight : number
 }
 
-export const Canvas = ({removeTrigger, operation, callSelected} : props) => {
+export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWidth, selectedOptionHeight} : props) => {
     const [graphics, setGraphics] = useState<IGraphic[]>([]);
     const [cursor, setCursor] = useState("default");
     const [position, setPosition] = useState<Position | null>(null);
@@ -32,15 +34,14 @@ export const Canvas = ({removeTrigger, operation, callSelected} : props) => {
             selectGraphic(x, y);
         }
         if (operation !== 0) {
-            const width : number = 20
-            const height: number = 50
+            if (selectedOptionHeight < 10 || selectedOptionWidth < 10) return;
             addGraphic({
                 x: x, 
                 y: y, 
-                width: width, 
-                height: height, 
+                width: selectedOptionWidth, 
+                height: selectedOptionHeight, 
                 type: operation - 1, 
-                boundingRect : {x1: x, x2: x + width, y1: y, y2: y + height}
+                boundingRect : {x1: x, x2: x + selectedOptionWidth, y1: y, y2: y + selectedOptionHeight}
             });
         }       
     }
