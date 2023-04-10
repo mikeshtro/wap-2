@@ -1,34 +1,48 @@
-.App {
-    background-color: #202124;
-    height: 100vh;
-    display: flex;
-    align-items: flex-start;
-}
-
-.container {
+.card {
     margin: 10px;
     background-color: #323639;
     border-radius: 20px;
-    display: flex;
-    flex-flow: column;
     overflow: hidden;
-}
-
-.right {
-    margin: 10px;
-    background-color: #323639;
-    border-radius: 20px;
     display: flex;
-    flex-flow: column;
-    overflow: hidden;
+    justify-content: center;
 }
 
 .row {
     display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.column {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.center {
+    justify-content: center;
+}
+
+.horizontal-center {
     align-items: center;
-    flex-flow: row;
-    overflow: hidden;
-    justify-content: space-between;
+}
+
+.input-text {
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+}
+
+.input {
+    background-color: #202124;
+    color: white;
+    border: 0px;
+    padding: 5px;
+    border-radius: 10px;
+    font-size: medium;
 }
 
 .header {
@@ -49,6 +63,14 @@
     padding: 20px;
     border: 0px;
     background-color: transparent;
+}
+
+.playButton{
+    padding: 10px !important;
+}
+
+.text-button {
+    margin: 5px;
 }
 
 .selectButtonSelected{

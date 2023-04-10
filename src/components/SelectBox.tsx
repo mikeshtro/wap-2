@@ -14,7 +14,8 @@ export const SelectBox = ({callSelect} : props) => {
     const [operation, setOperation] = useState<OperationType>(0);
 
     return (
-        <div className="container">
+        <div className="card">
+            <div className='column'>
             {types.map((type, index) =>
                 <button className={index===operation ? "selectButtonSelected" : "selectButton"} key={index} onClick={() => {setOperation(index); callSelect(index)}}>
                     <div>
@@ -27,6 +28,7 @@ export const SelectBox = ({callSelect} : props) => {
                     </div>
                 </button>
             )}
+            </div>
         </div>
     )
 }

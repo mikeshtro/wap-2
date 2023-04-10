@@ -6,7 +6,18 @@ export interface IGraphic {
     width: number,
     height: number,
     type: GraphicType,
-    boundingRect: BoundingRect
+    boundingRect: BoundingRect,
+    move? : Movement,
+}
+
+interface Movement {
+    dx: number,
+    dy: number,
+}
+
+export interface Size {
+    width: number,
+    height: number
 }
 
 export interface Position {

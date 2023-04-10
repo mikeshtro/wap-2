@@ -1,31 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import {IGraphic, Position } from '../models/IGraphic';
+import {IGraphic, Position, Size } from '../models/IGraphic';
 import { GraphicType, OperationType } from '../models/enums';
-import { detectGraphic } from '../utils/GraphicsLogic';
+import { detectGraphic, isAllDone, simulateStep } from '../utils/GraphicsLogic';
 
 interface props {
-    removeTrigger : number,
+    removeTrigger : boolean,
     operation: OperationType,
     callSelected(graphic : IGraphic | null) : void,
-    selectedOptionWidth : number,
-    selectedOptionHeight : number
+    selectedSize: Size,
+    status: boolean,
 }
 
-export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWidth, selectedOptionHeight} : props) => {
-    const [graphics, setGraphics] = useState<IGraphic[]>([]);
+var globalStatus = false;
+var graphics : IGraphic[] = [];
+
+export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status} : props) => {
     const [cursor, setCursor] = useState("default");
     const [position, setPosition] = useState<Position | null>(null);
     const [selectedGraphic, setSelectedGraphic] = useState<IGraphic | null>(null);
 
     const canvas = React.useRef<HTMLCanvasElement | null>(null);  
     const ctx = canvas.current?.getContext('2d');
+
+    
      
     useEffect(() => {
-        if (removeTrigger){
-            removeGraphic();
-        }
+        removeGraphic();
     },[removeTrigger]);
 
+    useEffect(() => {
+        async function play() {
+            var data = graphics;
+            while (!isAllDone(data) && globalStatus){
+                data = simulateStep(data);
+                redraw1(data);
+                await new Promise(res => setTimeout(res, 200));
+            }
+            graphics = data;
+        }
+        globalStatus = status;
+        if (globalStatus)
+            play();
+    }, [status])
 
     function onClick(e : React.MouseEvent){
         const x = e.clientX - (canvas.current?.offsetLeft ?? 0);
@@ -34,14 +50,14 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWi
             selectGraphic(x, y);
         }
         if (operation !== 0) {
-            if (selectedOptionHeight < 10 || selectedOptionWidth < 10) return;
+            if (selectedSize.height < 10 || selectedSize.width < 10) return;
             addGraphic({
                 x: x, 
                 y: y, 
-                width: selectedOptionWidth, 
-                height: selectedOptionHeight, 
+                width: selectedSize.width, 
+                height: selectedSize.height, 
                 type: operation - 1, 
-                boundingRect : {x1: x, x2: x + selectedOptionWidth, y1: y, y2: y + selectedOptionHeight}
+                boundingRect : {x1: x, x2: x + selectedSize.width, y1: y, y2: y + selectedSize.height}
             });
         }       
     }
@@ -76,7 +92,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWi
     }
 
     function addGraphic(graphic : IGraphic){
-        setGraphics([...graphics, graphic])
+        graphics = [...graphics, graphic];
         drawGraphic(graphic)
     }
 
@@ -96,6 +112,13 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWi
         if (selected){
             setSelectedGraphic(selected);
             drawSelected(selected);
+        }
+    }
+
+    function redraw1(graphics : IGraphic[]){
+        if (ctx){
+            ctx.clearRect(0,0,canvas?.current?.width ?? 0, canvas?.current?.height ?? 0)
+            graphics.forEach(drawGraphic)
         }
     }
 
@@ -120,16 +143,21 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedOptionWi
         if (!ctx) return
         switch(graphic.type){
             case GraphicType.Wall:
-                ctx.fillStyle = "grey"
+                ctx.fillStyle = "#202124";
+                ctx.fillRect(graphic.x, graphic.y, graphic.width, graphic.height);
                 break
             case GraphicType.Finish:
-                ctx.fillStyle = "green"
+                const finish = new Image();
+                finish.src = "/assets/finish.png";
+                finish.onload = function () {ctx.drawImage(finish, graphic.x, graphic.y);};
                 break
             default:
-                ctx.fillStyle = "red"
+                const robot = new Image();
+                robot.src = "/assets/robot.png";
+                robot.onload = function () {ctx.drawImage(robot, graphic.x, graphic.y);};
                 break
         }
-        ctx.fillRect(graphic.x, graphic.y, graphic.width, graphic.height)
+        
     }
 
     return (
