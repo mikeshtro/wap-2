@@ -19,7 +19,6 @@ function App() {
 
     return (
         <div>
-            <PlayBox setStatus={setStatus} status={status} operation={operation}/>
             <div className="row main">
                 <div className="side">
                     <SelectBox
@@ -27,7 +26,8 @@ function App() {
                         setOperation={setOperation}
                         status={status}/>
                 </div>
-
+                <div>
+                <PlayBox setStatus={setStatus} status={status} operation={operation}/>
                 <Canvas
                     operation={operation}
                     callSelected={setSelectedGraphic}
@@ -35,6 +35,9 @@ function App() {
                     selectedSize={size}
                     status={status}
                     setStatus={setStatus}/>
+                
+                </div>
+
 
                 <div className="right-side">
                     <DetailBox

@@ -32,7 +32,7 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, setSize, 
     }
 
     return (
-        <div className="card right">
+        <div className="card">
                 {
                 operation === 0 ?
                     <div>

@@ -12,7 +12,7 @@ interface props {
 
 export const SelectBox = ({operation, setOperation, status} : props) => {
     return (
-        <div className="card">
+        <div className="card right">
             <div className='column'>
             {types.map((type, index) =>
                 <button className={index===operation ? "selectButtonSelected" : "selectButton"} key={index} onClick={() => setOperation(index)}

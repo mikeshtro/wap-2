@@ -67,18 +67,19 @@
 
 .side {
     width: 10%;
+    margin-top: 100px;
 }
 
 .right-side {
     width: 20%;
+    margin-top: 100px;
 }
 
 .right {
     float: right;
 }
 
-
 .main {
     width: 100%;
-    justify-content: space-between;
+    justify-content: center;
 }
