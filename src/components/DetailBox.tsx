@@ -1,23 +1,24 @@
-import '../styles/App.css';
 import { MdDelete } from 'react-icons/md'
-import { IGraphic, Size } from '../models/IGraphic';
+import { Size } from '../models/IGraphic';
+import { Graphic } from '../models/Graphic';
+import { Wall } from '../models/Wall';
+import { Finish } from '../models/Finish';
 
 interface props {
     operation: number,
-    selectedGraphic: IGraphic | null,
+    selectedGraphic: Graphic | null,
     removeClicked(): void,
     setSize(_: Size): void,
     size: Size
 }
 
 export const DetailBox = ({ operation, selectedGraphic, removeClicked, setSize, size }: props) => {
-    function graphicToText(graphic: IGraphic | null): String {
+    function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
-        switch (graphic.type) {
-            case 0: return "Zeď";
-            case 1: return "Cíl";
+        switch (graphic.constructor) {
+            case Wall: return "Zeď";
+            case Finish: return "Cíl";
             default: return "Robot";
-
         }
     }
 
@@ -31,7 +32,7 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, setSize, 
     }
 
     return (
-        <div className="card">
+        <div className="card right">
                 {
                 operation === 0 ?
                     <div>

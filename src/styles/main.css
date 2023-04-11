@@ -1,10 +1,11 @@
 .card {
-    margin: 10px;
+    margin: 20px;
     background-color: #323639;
     border-radius: 20px;
     overflow: hidden;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    width: fit-content;
 }
 
 .row {
@@ -58,49 +59,26 @@
     background-color: #4688F4;
 }
 
-.selectButton {
-    color: white;
-    padding: 20px;
-    border: 0px;
-    background-color: transparent;
+.play {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.playButton{
-    padding: 10px !important;
+.side {
+    width: 10%;
 }
 
-.text-button {
-    margin: 5px;
+.right-side {
+    width: 20%;
 }
 
-.selectButtonSelected{
-    color: white;
-    padding: 20px;
-    border: 0px;
-    background-color: #4688F4;
+.right {
+    float: right;
 }
 
 
-.selectButton:hover {
-    background-color: #202124;
+.main {
+    width: 100%;
+    justify-content: space-between;
 }
-
-.selectButtonSelected:hover{
-    background-color: #3D6EC9;
-}
-
-.dltButton {
-    margin: 10px;
-    width: 200px;
-    color: #E64A39;
-    padding: 10px;
-    border: 0px;
-    border-radius: 20px;
-    background-color: #202124;
-}
-
-.dltButton:disabled {
-    color: #e64a394f;
-    background-color: #949494;
-}
-
