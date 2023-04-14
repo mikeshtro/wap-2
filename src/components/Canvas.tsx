@@ -10,6 +10,7 @@ import { Selected } from '../models/Selected';
 
 interface props {
     removeTrigger : boolean,
+    redrawTrigger : number,
     operation: OperationType,
     callSelected(graphic : Graphic | null) : void,
     selectedSize: Size,
@@ -22,11 +23,17 @@ var dragStartPosition : Position | null = null;
 var graphics : Graphic[] = [];
 var selectedGraphic : Graphic | null = null;
 
-export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
+export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
     const [cursor, setCursor] = useState("default");
 
     const canvas = React.useRef<HTMLCanvasElement | null>(null);  
     const ctx = canvas.current?.getContext('2d');
+
+    //Redraw
+    useEffect(() =>{
+        if (redrawTrigger) redraw(graphics);
+    },[redrawTrigger]);
+
 
     //Remove 
     useEffect(() => {

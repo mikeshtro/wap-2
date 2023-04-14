@@ -11,4 +11,9 @@ export class Wall extends Graphic {
         this.ctx.fillStyle = "#202124";
         this.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
     }
+
+    setSize(size:Size){
+        this.size = size;
+        this.recalculateBoundingRect();
+    }
 }
