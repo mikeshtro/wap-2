@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
 import {  OperationType } from '../models/enums';
-import { detectGraphic, isAllDone, simulateStep } from '../utils/GraphicsLogic';
+import { createBarrier, detectGraphic, isAllDone, simulateStep } from '../utils/GraphicsLogic';
 import { Graphic } from '../models/Graphic';
 import {Wall} from '../models/Wall';
 import { Finish } from '../models/Finish';
@@ -28,6 +28,11 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
     const canvas = React.useRef<HTMLCanvasElement | null>(null);  
     const ctx = canvas.current?.getContext('2d');
 
+    //On component created
+    useEffect(() => {
+        graphics = createBarrier({width: canvas.current?.width ?? 0, height: canvas.current?.height ?? 0});
+    }, []);
+    
     //Remove 
     useEffect(() => {
         if (!selectedGraphic) return;

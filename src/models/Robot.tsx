@@ -26,6 +26,7 @@ export class Robot extends Graphic {
     }
 
     draw(){
+        if (!this.ctx) return;
         this.ctx.drawImage(this.image, this.position.x, this.position.y);
     }
 
