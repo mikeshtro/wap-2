@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
 import {  OperationType } from '../models/enums';
-import { createBarrier, detectGraphic, isAllDone, simulateStep } from '../utils/GraphicsLogic';
+import { createBarrier, detectGraphic, isAllDone, simulateStep, someCollision } from '../utils/GraphicsLogic';
 import { Graphic } from '../models/Graphic';
 import {Wall} from '../models/Wall';
 import { Finish } from '../models/Finish';
 import { Robot } from '../models/Robot';
 import { Selected } from '../models/Selected';
+import { Error, Success, Warning } from '../utils/Messages';
 
 interface props {
     removeTrigger : boolean,
@@ -63,6 +64,10 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
 
     async function simulate(){
         var data = graphics;
+        if (!correct(data)) return;
+        if (someCollision(data)){
+            Warning('Výchozí pozice robota koliduje se zdí.');
+        }
         while (!isAllDone(data) && playStatus){
             data = simulateStep(data);
             redraw(data);
@@ -72,7 +77,22 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         //finished
         if (isAllDone(data)){
             setStatus(false);
+            Success('Všichni roboti dotazili do cíle.')
         }
+    }
+
+    function correct(data : Graphic[]) : boolean {
+        if (! data.some(g => g instanceof Robot)){
+            Error('Není vložen žádný robot!');
+            setStatus(false);
+            return false;
+        }
+        if (! data.some(g => g instanceof Finish)){
+            Error('Není vložen žádný cíl!');
+            setStatus(false);
+            return false;
+        }
+        return true;
     }
 
     function getPosition(e : React.MouseEvent) : Position {
@@ -87,7 +107,11 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
                 selectGraphic(position);
                 break;
             case OperationType.Wall:
-                if (selectedSize.height < 10 || selectedSize.width < 10) return;
+                if (selectedSize.height < 10 || selectedSize.width < 10){
+                    Error('Zeď musí mít minimální výšku a šířku 10');
+                    return;
+                }
+                    
                 graphics = [...graphics, new Wall(position, selectedSize, ctx)];
                 break;
             case OperationType.Finish:
@@ -149,8 +173,10 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
     }
 
     return (
-        <canvas onClick={onClick} onMouseDown={dragMouseDown} onMouseUp={dragMouseUp}
-        ref={canvas} height={700} width={1100} style={{backgroundColor: 'white', cursor: cursor}}
-        />
+        <div>
+            <canvas onClick={onClick} onMouseDown={dragMouseDown} onMouseUp={dragMouseUp}
+            ref={canvas} height={700} width={1100} style={{backgroundColor: 'white', cursor: cursor}}
+            />
+        </div>
     );
 };

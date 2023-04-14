@@ -27,6 +27,12 @@ export function simulateStep(graphics : Graphic[]) : Graphic[]{
     return [...graphics, ...robotsNextStep];
 }
 
+export function someCollision(graphics : Graphic[]) : boolean {
+    const robots = graphics.filter(g => g instanceof Robot) as Robot[];
+    const walls = graphics.filter(g => g instanceof Wall) as Wall[];
+    return robots.some(r => walls.some(w => r.isCollision(w)));
+}
+
 export function isAllDone(graphics : Graphic[]){
     const robots = graphics.filter(g => g instanceof Robot) as Robot[];
     const finishes = graphics.filter(g => g instanceof Finish) as Finish[];

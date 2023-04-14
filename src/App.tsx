@@ -8,6 +8,8 @@ import { Size } from './models/IGraphic';
 import { PlayBox } from './components/PlayBox';
 import { Graphic } from './models/Graphic';
 import { OperationType } from './models/enums';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
@@ -19,6 +21,7 @@ function App() {
 
     return (
         <div>
+            <div>
             <div className="row main">
                 <div className="side">
                     <SelectBox
@@ -48,6 +51,8 @@ function App() {
                         size={size}/>
                 </div>
             </div>
+            </div>
+            <ToastContainer/>
         </div>
     );
 
