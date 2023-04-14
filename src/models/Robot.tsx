@@ -26,6 +26,7 @@ export class Robot extends Graphic {
     }
 
     draw(){
+        if (!this.ctx) return;
         this.ctx.drawImage(this.image, this.position.x, this.position.y);
     }
 
@@ -49,7 +50,7 @@ export class Robot extends Graphic {
         return finishes.some(f => this.isCollision(f));
     }
 
-    private isCollision(graphic2 : Graphic, graphic1 : Robot = this){
+    isCollision(graphic2 : Graphic, graphic1 : Robot = this){
         return !((graphic1.boundingRect.y2 < graphic2.boundingRect.y1) ||
                 (graphic1.boundingRect.y1 > graphic2.boundingRect.y2) ||
                 (graphic1.boundingRect.x2 < graphic2.boundingRect.x1) ||

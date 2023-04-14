@@ -27,8 +27,23 @@ export function simulateStep(graphics : Graphic[]) : Graphic[]{
     return [...graphics, ...robotsNextStep];
 }
 
+export function someCollision(graphics : Graphic[]) : boolean {
+    const robots = graphics.filter(g => g instanceof Robot) as Robot[];
+    const walls = graphics.filter(g => g instanceof Wall) as Wall[];
+    return robots.some(r => walls.some(w => r.isCollision(w)));
+}
+
 export function isAllDone(graphics : Graphic[]){
     const robots = graphics.filter(g => g instanceof Robot) as Robot[];
     const finishes = graphics.filter(g => g instanceof Finish) as Finish[];
     return robots.every(r => r.isInFinish(finishes));
+}
+
+export function createBarrier(size: Size,) : Graphic[]{
+    return [
+        new Wall({x: -1, y: 0}, {width: 1, height: size.height}),
+        new Wall({x: 0, y: -1}, {width: size.width, height: 1}),
+        new Wall({x: size.width + 1, y : 0}, {width: 1, height: size.height}),
+        new Wall({x: 0, y: size.height + 1}, {width: size.width, height: 1})
+    ];
 }
