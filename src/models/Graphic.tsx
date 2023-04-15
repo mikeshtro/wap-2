@@ -7,7 +7,7 @@ export abstract class Graphic {
     boundingRect : BoundingRect;
     ctx?: CanvasRenderingContext2D;
 
-    abstract draw(ctx: CanvasRenderingContext2D) : void;
+    abstract draw() : void;
 
     constructor(position : Position, size : Size, ctx : CanvasRenderingContext2D | undefined = undefined){
         this.position = position;
