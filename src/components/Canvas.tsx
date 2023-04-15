@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
 import {  OperationType } from '../models/enums';
-import { createBarrier, detectGraphic, isAllDone, simulateStep, someCollision } from '../utils/GraphicsLogic';
+import { createBarrier, detectGraphic, drawSelected, redraw } from '../utils/GraphicsLogic';
 import { Graphic } from '../models/Graphic';
 import {Wall} from '../models/Wall';
 import { Finish } from '../models/Finish';
 import { Robot } from '../models/Robot';
-import { Selected } from '../models/Selected';
 import { Error, Success, Warning } from '../utils/Messages';
+import { isAllDone, simulateStep, someCollision } from '../utils/SimulateLogic';
 
 interface props {
     removeTrigger : boolean,
-    redrawTrigger : number,
     operation: OperationType,
     callSelected(graphic : Graphic | null) : void,
     selectedSize: Size,
@@ -19,33 +18,35 @@ interface props {
     setStatus(_ : boolean) : void
 }
 
+export var ctx : CanvasRenderingContext2D;
+export const canvasSize : Size = {width: 1100, height: 650};
+export var graphics : Graphic[] = [];
+export function setGraphics(g : Graphic[]){
+    graphics = g;
+}
+
 var playStatus = false;
 var dragStartPosition : Position | null = null;
-var graphics : Graphic[] = [];
 var selectedGraphic : Graphic | null = null;
 
-export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
+export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
     const [cursor, setCursor] = useState("default");
-
-    const canvas = React.useRef<HTMLCanvasElement | null>(null);  
-    const ctx = canvas.current?.getContext('2d');
-
-    //Redraw
-    useEffect(() =>{
-        if (redrawTrigger) redraw(graphics);
-    },[redrawTrigger]);
-
-
-    //On component created
+    const canvas = React.useRef<HTMLCanvasElement | null>(null); 
+    
+    //On component mounted
     useEffect(() => {
-        graphics = createBarrier({width: canvas.current?.width ?? 0, height: canvas.current?.height ?? 0});
-    }, []);
+        const _ctx = canvas.current?.getContext('2d');
+        if (_ctx){
+            ctx = _ctx;
+            graphics = createBarrier();
+        }
+    }, [canvas])
     
     //Remove 
     useEffect(() => {
         if (!selectedGraphic) return;
         graphics.splice(graphics.indexOf(selectedGraphic), 1);
-        redraw(graphics);
+        redraw();
         selectedGraphic = null;
         callSelected(null);
     // eslint-disable-next-line
@@ -63,38 +64,36 @@ export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, s
 
     //Unselect graphic
     useEffect(() => {
-        if (operation !== OperationType.Cursor){
-            unselectGraphic();
-        }
+        if (operation !== OperationType.Cursor) unselectGraphic();
     // eslint-disable-next-line
     },[operation])
 
+
+
     async function simulate(){
-        var data = graphics;
-        if (!correct(data)) return;
-        if (someCollision(data)){
+        if (!correct()) return;
+        if (someCollision()){
             Warning('Výchozí pozice robota koliduje se zdí.');
         }
-        while (!isAllDone(data) && playStatus){
-            data = simulateStep(data);
-            redraw(data);
+        while (!isAllDone() && playStatus){
+            graphics = simulateStep();
+            redraw();
             await new Promise(res => setTimeout(res, 25));
         }
-        graphics = data;
         //finished
-        if (isAllDone(data)){
+        if (isAllDone()){
             setStatus(false);
             Success('Všichni roboti dotazili do cíle.')
         }
     }
 
-    function correct(data : Graphic[]) : boolean {
-        if (! data.some(g => g instanceof Robot)){
+    function correct() : boolean {
+        if (! graphics.some(g => g instanceof Robot)){
             Error('Není vložen žádný robot!');
             setStatus(false);
             return false;
         }
-        if (! data.some(g => g instanceof Finish)){
+        if (! graphics.some(g => g instanceof Finish)){
             Error('Není vložen žádný cíl!');
             setStatus(false);
             return false;
@@ -117,8 +116,7 @@ export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, s
                 if (selectedSize.height < 10 || selectedSize.width < 10){
                     Error('Zeď musí mít minimální výšku a šířku 10');
                     return;
-                }
-                    
+                } 
                 graphics = [...graphics, new Wall(position, selectedSize, ctx)];
                 break;
             case OperationType.Finish:
@@ -133,7 +131,7 @@ export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, s
     function dragMouseDown(e : React.MouseEvent){
         if(operation !== OperationType.Cursor || !selectedGraphic) return;
         const position = getPosition(e)
-        if (detectGraphic(graphics, position) === selectedGraphic) {
+        if (detectGraphic(position) === selectedGraphic) {
             dragStartPosition = position;
             setCursor("move");
         }
@@ -157,33 +155,24 @@ export const Canvas = ({removeTrigger, redrawTrigger, operation, callSelected, s
 
     function unselectGraphic(){
         selectedGraphic = null;
-        redraw(graphics);
+        redraw();
         callSelected(null);
     }
 
     function selectGraphic(position : Position){
         unselectGraphic();
-        const selected = detectGraphic(graphics, position);
+        const selected = detectGraphic(position);
         callSelected(selected ?? null);
         if (selected){
             selectedGraphic = selected;
-            if (ctx)
-                new Selected(selected.position, selected.size, ctx);
-        }
-    }
-
-    function redraw(graphics : Graphic[]){
-        if (ctx){
-            ctx.clearRect(0,0,canvas?.current?.width ?? 0, canvas?.current?.height ?? 0)
-            graphics.forEach(g => g.draw(ctx))
+            drawSelected(selectedGraphic);
         }
     }
 
     return (
         <div>
             <canvas onClick={onClick} onMouseDown={dragMouseDown} onMouseUp={dragMouseUp}
-            ref={canvas} height={700} width={1100} style={{backgroundColor: 'white', cursor: cursor}}
-            />
+            ref={canvas} height={canvasSize.height} width={canvasSize.width} style={{backgroundColor: 'white', cursor: cursor}}/>
         </div>
     );
-};
+}

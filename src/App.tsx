@@ -11,6 +11,9 @@ import { OperationType } from './models/enums';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Wall } from './models/Wall';
+import { Error } from './utils/Messages';
+import { drawSelected, redraw } from './utils/GraphicsLogic';
+import { MapSaver } from './components/MapSaver';
 
 
 function App() {
@@ -18,9 +21,7 @@ function App() {
     const [operation, setOperation] = useState<OperationType>(0);
     const [selectedGraphic, setSelectedGraphic] = useState<Graphic | null>(null);
     const [removeTrigger, setRemoveTrigger] = useState<boolean>(false);
-    const [redrawTrigger, setRedrawTrigger] = useState<number>(0);
     const [size, setSize] = useState<Size>({width: 10, height: 10});
-
 
     function setSelected(graphic:Graphic) {
         setSelectedGraphic(graphic);
@@ -30,8 +31,15 @@ function App() {
     }
 
     function updateSize() {
-        (selectedGraphic as Wall).setSize(size);
-        setRedrawTrigger(redrawTrigger+1);
+        if (size.height < 10 || size.width < 10){
+            Error('Zeď musí mít minimální výšku a šířku 10');
+            return;
+        }
+        if (selectedGraphic){
+            (selectedGraphic as Wall).setSize(size);
+            redraw();
+            drawSelected(selectedGraphic);
+        }
     }
 
     function setDefaultSize(operation:OperationType) {
@@ -42,7 +50,6 @@ function App() {
 
     return (
         <div>
-            <div>
             <div className="row main">
                 <div className="side">
                     <SelectBox
@@ -56,11 +63,10 @@ function App() {
                     operation={operation}
                     callSelected={setSelected}
                     removeTrigger={removeTrigger}
-                    redrawTrigger={redrawTrigger}
                     selectedSize={size}
                     status={status}
                     setStatus={setStatus}/>
-                
+                <MapSaver/>
                 </div>
 
 
@@ -73,7 +79,6 @@ function App() {
                         saveClicked={updateSize}
                         size={size}/>
                 </div>
-            </div>
             </div>
             <ToastContainer/>
         </div>

@@ -61,6 +61,7 @@
 
 .play {
     width: fit-content;
+    margin: 10px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -82,4 +83,30 @@
 .main {
     width: 100%;
     justify-content: center;
+}
+
+.maps {
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+}
+
+.mapsBox {
+    background-color: #323639;
+    overflow: hidden;
+    display: flex;
+    width: 20%;
+    border: 1px #202124 solid;
+    box-sizing: border-box;
+}
+
+.mapsCol {
+    flex-flow: column;
+}
+
+.mapsText {
+    margin: 0;
+    padding: 5px;
+    color: white;
+    background-color: #4688F4;
 }
