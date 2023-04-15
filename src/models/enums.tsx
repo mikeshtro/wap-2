@@ -4,3 +4,9 @@ export enum OperationType {
     Finish,
     Robot
 }
+
+export enum GraphicType {
+    Wall,
+    Finish,
+    Robot
+}
