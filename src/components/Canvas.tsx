@@ -19,7 +19,7 @@ interface props {
 }
 
 export var ctx : CanvasRenderingContext2D;
-export const canvasSize : Size = {width: 1100, height: 650};
+export const canvasSize : Size = {width: 1200, height: 700};
 export var graphics : Graphic[] = [];
 export function setGraphics(g : Graphic[]){
     graphics = g;

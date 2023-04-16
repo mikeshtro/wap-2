@@ -8,5 +8,6 @@ export enum OperationType {
 export enum GraphicType {
     Wall,
     Finish,
-    Robot
+    Robot,
+    Selected
 }

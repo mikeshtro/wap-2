@@ -22,7 +22,7 @@ export function saveData(id : number){
             }
         });
     localStorage.setItem(id.toString(), JSON.stringify(data));
-    Success('Data byla uložena.');
+    Success('Mapa byla uložena.');
 }
 
 export function loadData(id : number){
@@ -48,7 +48,12 @@ export function loadData(id : number){
     })
     setGraphics(finalData);
     redraw();
-    Success('Data byla načtena.');
+    Success('Mapa byla načtena.');
+}
+
+export function removeData(id : number){
+    localStorage.removeItem(id.toString());
+    Success("Mapa byla smazána.")
 }
 
 export function exist(id : number) : boolean {

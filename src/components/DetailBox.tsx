@@ -1,10 +1,10 @@
 import { MdDelete } from 'react-icons/md'
 import { Size } from '../models/IGraphic';
 import { Graphic } from '../models/Graphic';
-import { Wall } from '../models/Wall';
-import { Finish } from '../models/Finish';
 import { EditBox } from './EditBox';
 import { FaSave } from 'react-icons/fa';
+import { GraphicType, OperationType } from '../models/enums';
+import { Button, Card, Col, Row } from 'react-bootstrap';
 
 interface props {
     operation: number,
@@ -15,12 +15,12 @@ interface props {
     size: Size
 }
 
-export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked,setSize, size }: props) => {
+export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size }: props) => {
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
-        switch (graphic.constructor) {
-            case Wall: return "Zeď";
-            case Finish: return "Cíl";
+        switch (graphic.type) {
+            case GraphicType.Wall: return "Zeď";
+            case GraphicType.Finish: return "Cíl";
             default: return "Robot";
         }
     }
@@ -35,50 +35,81 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
     }
 
     return (
-        <div className="card">
-                {
-                operation === 0 ?
-                    <div>
-                        <h3 className={selectedGraphic ? "headerPrim" : "header"}>
-                            Označeno: {graphicToText(selectedGraphic)}
-                        </h3>
-                        <button className="dltButton" onClick={removeClicked} disabled={!selectedGraphic}>
-                            <div className="row horizontal-center center">
-                                <h3>Smazat</h3>
-                                <MdDelete size={25}/>
-                                </div>
-                        </button>
-                        {
-                            selectedGraphic instanceof Wall ? 
-                            <div>
-                                <EditBox
-                                    size={size}
-                                    setSize={setSize}
-                                /> 
-
-                                <button className="dltButton" onClick={saveClicked} disabled={!selectedGraphic}>
-                                    <div className="row horizontal-center center">
-                                        <h3>Uložit</h3>
-                                        <FaSave size={25}/>
-                                        </div>
-                                </button>
-                            </div>
-                            : null
-
-                        }
-                    </div> 
+        <div>
+            {
+                operation === OperationType.Cursor ?
+                    selectedGraphic ?
+                        <Card className="myCard">
+                            <Card.Header>
+                                <h4>
+                                    Označeno: {graphicToText(selectedGraphic)}
+                                </h4>
+                            </Card.Header>
+                            <Card.Body>
+                                <Row>
+                                    <Col align="center">
+                                        <Button variant='danger' className='margin-bottom' onClick={removeClicked} disabled={!selectedGraphic}>
+                                            <Row>
+                                                <Col>
+                                                    <h5>Smazat</h5>
+                                                </Col>
+                                                <Col>
+                                                    <MdDelete size={25} />
+                                                </Col>
+                                            </Row>
+                                        </Button>
+                                    </Col>
+                                </Row>
+                                {
+                                    selectedGraphic?.type === GraphicType.Wall ?
+                                        <Card className='myCard-prim'>
+                                            <Card.Body>
+                                                <EditBox
+                                                    size={size}
+                                                    setSize={setSize}
+                                                />
+                                                <Row>
+                                                    <Col align="center">
+                                                        <Button variant='primary' className='margin-top' onClick={saveClicked} disabled={!selectedGraphic}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <h5>Uložit</h5>
+                                                                </Col>
+                                                                <Col>
+                                                                    <FaSave size={25} />
+                                                                </Col>
+                                                            </Row>
+                                                        </Button>
+                                                    </Col>
+                                                </Row>
+                                            </Card.Body>
+                                        </Card>
+                                        : null
+                                }
+                            </Card.Body>
+                        </Card>
+                        : null
                     :
-                    <div>
-                        <h3 className="headerPrim">Vytváříte: {operationToText(operation)}</h3>
-                        {
-                        operation === 1 ?
-                            <EditBox
-                                size={size}
-                                setSize={setSize}
-                            /> : null
-                        }
-                    </div>
-                }
-        </div>
+                    <Card className="myCard">
+                        <Card.Header>
+                            <h4>
+                                Vytváříte: {operationToText(operation)}
+                            </h4>
+                        </Card.Header>
+                        <Card.Body>
+                            {
+                                operation === OperationType.Wall ? <Card className='myCard-prim'>
+                                    <Card.Body>
+                                        <EditBox
+                                            size={size}
+                                            setSize={setSize}
+                                        />
+                                    </Card.Body>
+                                </Card> : null
+                            }
+                        </Card.Body>
+                    </Card>
+            }
+        </div >
     )
 }

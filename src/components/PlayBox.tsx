@@ -1,3 +1,4 @@
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { OperationType } from '../models/enums';
 import { FaPlay, FaStop } from 'react-icons/fa';
 
@@ -9,21 +10,21 @@ interface props {
 
 export const PlayBox = ({setStatus, status, operation} : props) => {
     return (
-        <div className='card row center play'>
-                <button className={status ? "selectButtonSelected playButton" : "selectButton playButton"} onClick={() => {setStatus(true)}}
+        <ButtonGroup className="margin-10">
+                <Button variant={status ? "primary" : "secondary"} onClick={() => {setStatus(true)}}
                     disabled={operation !== OperationType.Cursor}>
                     <div>
-                        <FaPlay size={20}/>
-                        <h4 className='text-button'>Spustit</h4>
+                        <FaPlay size={25}/>
+                        <h5 className='text-button'>Spustit</h5>
                     </div>
-                </button>
-                <button className={!status ? "selectButtonSelected playButton" : "selectButton playButton"} onClick={() => {setStatus(false)}}
+                </Button>
+                <Button variant={!status ? "primary" : "secondary"} onClick={() => {setStatus(false)}}
                     disabled={operation !== OperationType.Cursor}>
                     <div>
-                        <FaStop size={20}/>
-                        <h4 className='text-button'>Zastavit</h4>
+                        <FaStop size={25}/>
+                        <h5 className='text-button'>Zastavit</h5>
                     </div>
-                </button>
-    </div>
+                </Button>
+        </ButtonGroup>
     )
 }

@@ -1,11 +1,12 @@
 import { Graphic } from "./Graphic";
 import { Position } from "./IGraphic";
+import { GraphicType } from "./enums";
 
 export class Finish extends Graphic {
     image : HTMLImageElement;
 
     constructor(position : Position, ctx : CanvasRenderingContext2D){
-        super(position, {width: 32, height: 32}, ctx);
+        super(position, {width: 32, height: 32}, GraphicType.Finish, ctx);
         const image = new Image();
         image.src = "/assets/finish.png";
         image.onload = function () {

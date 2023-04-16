@@ -2,6 +2,7 @@ import { getBoundingRect } from "../utils/GraphicsLogic";
 import { Graphic } from "./Graphic";
 import { Position } from "./IGraphic";
 import { Wall } from "./Wall";
+import { GraphicType } from "./enums";
 
 interface Movement {
     dx: number,
@@ -13,7 +14,7 @@ export class Robot extends Graphic {
     movement : Movement;
 
     constructor(position : Position, ctx : CanvasRenderingContext2D){
-        super(position, {width: 32, height: 32}, ctx);
+        super(position, {width: 32, height: 32}, GraphicType.Robot, ctx);
         const image = new Image();
         image.src = "/assets/robot.png";
         image.onload = function () {
