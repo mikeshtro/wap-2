@@ -13,7 +13,7 @@ interface props {
     saveClicked(): void,
     setSize(_: Size): void,
     size: Size,
-    setMovementType(_ : any): void,
+    setMovementType(_ : string |null): void,
     movementType: MovementType
 }
 

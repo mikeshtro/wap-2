@@ -51,7 +51,7 @@ function MainPage() {
         setStatus(false);
     }
 
-    const changeMovementType = (eventKey: any) => {
+    const changeMovementType = (eventKey: string | null) => {
         setMovementType(eventKey as MovementType);
         if (selectedGraphic instanceof Robot) {
             selectedGraphic.setMovementType(eventKey as MovementType);

@@ -161,6 +161,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
 
     function selectGraphic(position : Position){
         unselectGraphic();
+        if (playStatus) return;
         const selected = detectGraphic(position);
         callSelected(selected ?? null);
         if (selected){

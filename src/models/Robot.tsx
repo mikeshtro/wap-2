@@ -22,7 +22,7 @@ export class Robot extends Graphic {
     image : any;
     movement : Movement;
 
-    constructor(position : Position, ctx : CanvasRenderingContext2D){
+    constructor(position : Position, ctx : CanvasRenderingContext2D, moveType : MovementType = MovementType.Random){
         super(position, {width: 32, height: 32}, GraphicType.Robot, ctx);
         const image = new Image();
         image.src = "/assets/robot.png";
@@ -32,7 +32,7 @@ export class Robot extends Graphic {
         this.image = image;
 
         //Defaultne pojede nahoru
-        this.movement = {type: MovementType.Random, ...Movements[Directions.Up]};
+        this.movement = {type: moveType, ...Movements[Directions.Up]};
     }
 
     setMovementType(movementType: MovementType) {
