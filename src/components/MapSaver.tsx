@@ -3,9 +3,13 @@ import { exist, loadData, removeData, saveData } from "../utils/StorageLogic"
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { Button, ButtonGroup, Card, Modal } from 'react-bootstrap';
 
+interface props {
+    loaded() : void;
+}
+
 const ids = [1,2,3,4,5];
 
-export const MapSaver = () => {
+export const MapSaver = ({loaded} : props) => {
     const [visible, setVisible] = useState<boolean>(false);
     const [exists, setExists] = useState<boolean[]>([false,false,false,false,false]);
 
@@ -26,6 +30,7 @@ export const MapSaver = () => {
     function loadMap(index : number){
         loadData(index);
         setVisible(false);
+        loaded();
     }
 
     function removeMap(index: number){
