@@ -13,7 +13,7 @@ interface props {
 
 export const SelectBox = ({operation, setOperation, status} : props) => {
     return (
-        <ButtonGroup vertical>
+        <ButtonGroup vertical={window.innerWidth > 1468} className='margin-bottom'>
             {types.map((type, index) =>
                 <Button variant={index===operation ? "primary" : "secondary"} key={index} onClick={() => setOperation(index)}
                     disabled={status}>
