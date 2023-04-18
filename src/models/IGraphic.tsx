@@ -1,4 +1,4 @@
-import { GraphicType } from "./enums"
+import { GraphicType, MovementType } from "./enums"
 
 export interface Size {
     width: number,
@@ -20,6 +20,7 @@ export interface BoundingRect {
 export interface IGraphicSave {
     position: Position,
     size?: Size,
-    type: GraphicType
+    type: GraphicType,
+    movementType?: MovementType
 }
 

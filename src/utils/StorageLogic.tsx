@@ -9,7 +9,7 @@ import { redraw } from "./GraphicsLogic";
 import { Error, Success } from "./Messages";
 
 export function saveData(id : number){
-    const data : IGraphicSave[] = graphics.map(g => 
+    const data : IGraphicSave[] = graphics.filter(g => g.type !== GraphicType.Selected).map(g => 
         {
             if (g instanceof Wall) {
                 return ({type: GraphicType.Wall, size: g.size, position: g.position});
@@ -18,7 +18,7 @@ export function saveData(id : number){
                 return ({type: GraphicType.Finish, position: g.position});
             }
             else {
-                return ({type: GraphicType.Robot, position: g.position});
+                return ({type: GraphicType.Robot, position: g.position, movementType: (g as Robot).movement.type});
             }
         });
     localStorage.setItem(id.toString(), JSON.stringify(data));
@@ -42,7 +42,7 @@ export function loadData(id : number){
                 finalData = [...finalData, new Finish(g.position, ctx)];
                 break;
             default:
-                finalData = [...finalData, new Robot(g.position, ctx)];
+                finalData = [...finalData, new Robot(g.position, ctx, g.movementType)];
                 break;
         }
     })
