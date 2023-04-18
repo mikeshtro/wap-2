@@ -2,14 +2,15 @@ import { useState } from "react";
 import { Graphic } from "../models/Graphic";
 import { DetailBox } from "../components/DetailBox";
 import { MapSaver } from "../components/MapSaver";
-import { Canvas } from "../components/Canvas";
+import { Canvas, graphics } from "../components/Canvas";
 import { PlayBox } from "../components/PlayBox";
 import { SelectBox } from "../components/SelectBox";
 import { drawSelected, redraw } from "../utils/GraphicsLogic";
 import { Wall } from "../models/Wall";
-import { OperationType } from "../models/enums";
+import { MovementType, OperationType } from "../models/enums";
 import { Size } from "../models/IGraphic";
 import { Col, Container, Row } from "react-bootstrap";
+import { Robot } from "../models/Robot";
 
 
 function MainPage() {
@@ -18,6 +19,7 @@ function MainPage() {
     const [selectedGraphic, setSelectedGraphic] = useState<Graphic | null>(null);
     const [removeTrigger, setRemoveTrigger] = useState<boolean>(false);
     const [size, setSize] = useState<Size>({ width: 10, height: 10 });
+    const [movementType, setMovementType] = useState<MovementType>(MovementType.Random);
 
     function setSelected(graphic: Graphic) {
         setSelectedGraphic(graphic);
@@ -43,6 +45,13 @@ function MainPage() {
         if (OperationType.Wall === operation)
             setSize({ width: 10, height: 10 });
     }
+
+    const changeMovementType = (eventKey: any) => {
+        setMovementType(eventKey as MovementType);
+        if (selectedGraphic instanceof Robot) {
+            selectedGraphic.setMovementType(eventKey as MovementType);
+        }
+    };
 
     return (
         <Container fluid>
@@ -75,7 +84,9 @@ function MainPage() {
                         removeClicked={() => setRemoveTrigger(!removeTrigger)}
                         setSize={setSize}
                         saveClicked={updateSize}
-                        size={size} />
+                        size={size}
+                        setMovementType={changeMovementType} 
+                        movementType={movementType}/>
                 </Col>
             </Row>
             <Row align="center">
