@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Graphic } from "../models/Graphic";
 import { DetailBox } from "../components/DetailBox";
 import { MapSaver } from "../components/MapSaver";
-import { Canvas, graphics } from "../components/Canvas";
+import { Canvas } from "../components/Canvas";
 import { PlayBox } from "../components/PlayBox";
 import { SelectBox } from "../components/SelectBox";
 import { drawSelected, redraw } from "../utils/GraphicsLogic";
@@ -44,6 +44,11 @@ function MainPage() {
         setOperation(operation);
         if (OperationType.Wall === operation)
             setSize({ width: 10, height: 10 });
+    }
+
+    function mapLoaded(){
+        setSelectedGraphic(null);
+        setStatus(false);
     }
 
     const changeMovementType = (eventKey: any) => {
@@ -90,7 +95,7 @@ function MainPage() {
                 </Col>
             </Row>
             <Row align="center">
-                <MapSaver />
+                <MapSaver loaded={mapLoaded}/>
             </Row>
         </Container>
     );
