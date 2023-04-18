@@ -19,7 +19,9 @@ interface props {
 }
 
 export var ctx : CanvasRenderingContext2D;
-export const canvasSize : Size = {width: 1200, height: 700};
+const ratio = 16/9;
+const width = Math.min(1200, window.innerWidth - 30);
+export const canvasSize : Size = {width: width, height: width/ratio};
 export var graphics : Graphic[] = [];
 export function setGraphics(g : Graphic[]){
     graphics = g;

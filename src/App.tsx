@@ -5,10 +5,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MainPage from './pages/MainPage';
 import { ToastContainer } from 'react-toastify';
 
-
 function App() {
     return (
-        <div className="main">
+        <div>
             <MainPage/>
             <ToastContainer/>
         </div>
