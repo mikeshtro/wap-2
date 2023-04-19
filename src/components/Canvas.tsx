@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
-import {  OperationType } from '../models/enums';
+import {  Directions, MovementType, OperationType } from '../models/enums';
 import { createBarrier, detectGraphic, drawSelected, redraw } from '../utils/GraphicsLogic';
 import { Graphic } from '../models/Graphic';
 import {Wall} from '../models/Wall';
 import { Finish } from '../models/Finish';
 import { Robot } from '../models/Robot';
 import { Error, Success, Warning } from '../utils/Messages';
-import { isAllDone, simulateStep, someCollision } from '../utils/SimulateLogic';
+import { isAllDone, simulateStep, someCollision, turning } from '../utils/SimulateLogic';
 
 interface props {
     removeTrigger : boolean,
@@ -15,7 +15,8 @@ interface props {
     callSelected(graphic : Graphic | null) : void,
     selectedSize: Size,
     status: boolean,
-    setStatus(_ : boolean) : void
+    setStatus(_ : boolean) : void,
+    movementType: MovementType
 }
 
 export var ctx : CanvasRenderingContext2D;
@@ -27,14 +28,22 @@ export function setGraphics(g : Graphic[]){
     graphics = g;
 }
 
+const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
+
 var playStatus = false;
 var dragStartPosition : Position | null = null;
 var selectedGraphic : Graphic | null = null;
 
-export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
+export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : props) => {
     const [cursor, setCursor] = useState("default");
-    const canvas = React.useRef<HTMLCanvasElement | null>(null); 
-    
+    const canvas = React.useRef<HTMLCanvasElement | null>(null);     
+
+    const handler = (e: KeyboardEvent) => {
+        if (playStatus && keys.some(k => k === e.key)) {
+            turning(e.key);
+        }
+    };
+
     //On component mounted
     useEffect(() => {
         const _ctx = canvas.current?.getContext('2d');
@@ -42,7 +51,9 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
             ctx = _ctx;
             graphics = createBarrier();
         }
+        window.addEventListener('keydown', handler, false);
     }, [canvas])
+
     
     //Remove 
     useEffect(() => {
@@ -125,7 +136,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
                 graphics = [...graphics, new Finish(position, ctx)];
                 break;
             default:
-                graphics = [...graphics, new Robot(position, ctx)];
+                graphics = [...graphics, new Robot(position, ctx, movementType)];
                 break;
         }     
     }

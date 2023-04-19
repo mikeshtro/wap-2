@@ -80,7 +80,9 @@ function MainPage() {
                         removeTrigger={removeTrigger}
                         selectedSize={size}
                         status={status}
-                        setStatus={setStatus} />
+                        setStatus={setStatus}
+                        movementType={movementType}
+                        />
                 </Col>
                 <Col sm align="left">
                     <DetailBox
@@ -91,7 +93,8 @@ function MainPage() {
                         saveClicked={updateSize}
                         size={size}
                         setMovementType={changeMovementType} 
-                        movementType={movementType}/>
+                        movementType={movementType}
+                        />
                 </Col>
             </Row>
             <Row align="center">

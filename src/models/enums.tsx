@@ -15,12 +15,13 @@ export enum GraphicType {
 export enum MovementType {
     Random = "Random",
     RightHand = "Right Hand",
-    LeftHand = "Left Hand"
+    LeftHand = "Left Hand",
+    Custom = "Custom"
 }
 
 export enum Directions {
-    Up = "up",
-    Right = "right",
-    Down = "down",
-    Left = "left"
+    Up = "ArrowUp",
+    Right = "ArrowRight",
+    Down = "ArrowDown",
+    Left = "ArrowLeft"
 }

@@ -35,6 +35,11 @@ export class Robot extends Graphic {
         this.movement = {type: moveType, ...Movements[Directions.Up]};
     }
 
+    setDirection(direction: Directions) {
+        this.movement.curDirection = direction;
+        this.movement = {...this.movement, ...Movements[direction]};
+    }
+
     setMovementType(movementType: MovementType) {
         this.movement.type = movementType;
         //reset pohybu pri zmeny nastaveni
@@ -65,26 +70,53 @@ export class Robot extends Graphic {
     }
 
     rightHandMove() {
-        if (this.movement.curDirection === Directions.Up) {
-            this.movement = {...this.movement, ...Movements[Directions.Right]};
-        } else if (this.movement.curDirection === Directions.Right) {
-            this.movement = {...this.movement, ...Movements[Directions.Down]};
-        } else if (this.movement.curDirection === Directions.Down) {
-            this.movement = {...this.movement, ...Movements[Directions.Left]};
-        } else if (this.movement.curDirection === Directions.Left) {
-            this.movement = {...this.movement, ...Movements[Directions.Up]};
+        switch (this.movement.curDirection) {
+            case Directions.Up:
+                this.movement = {...this.movement, ...Movements[Directions.Right]};
+                break;
+            case Directions.Right:
+                this.movement = {...this.movement, ...Movements[Directions.Down]};
+                break;
+            case Directions.Down:
+                this.movement = {...this.movement, ...Movements[Directions.Left]};
+                break;
+            case Directions.Left:
+                this.movement = {...this.movement, ...Movements[Directions.Up]};
+                break;
         }
     }
 
     leftHandMove() {
-        if (this.movement.curDirection === Directions.Up) {
-            this.movement = {...this.movement, ...Movements[Directions.Left]};
-        } else if (this.movement.curDirection === Directions.Right) {
-            this.movement = {...this.movement, ...Movements[Directions.Up]};
-        } else if (this.movement.curDirection === Directions.Down) {
-            this.movement = {...this.movement, ...Movements[Directions.Right]};
-        } else if (this.movement.curDirection === Directions.Left) {
-            this.movement = {...this.movement, ...Movements[Directions.Down]};
+        switch (this.movement.curDirection) {
+            case Directions.Up:
+                this.movement = {...this.movement, ...Movements[Directions.Left]};
+                break;
+            case Directions.Right:
+                this.movement = {...this.movement, ...Movements[Directions.Up]};
+                break;
+            case Directions.Down:
+                this.movement = {...this.movement, ...Movements[Directions.Right]};
+                break;
+            case Directions.Left:
+                this.movement = {...this.movement, ...Movements[Directions.Down]};
+                break;
+        }
+    }
+
+    customMove() {
+        switch (this.movement.curDirection) {
+            case Directions.Up:
+                this.movement = {...this.movement, ...Movements[Directions.Up]};
+                break;
+            case Directions.Right:
+                this.movement = {...this.movement, ...Movements[Directions.Right]};
+                break;
+            case Directions.Down:
+                this.movement = {...this.movement, ...Movements[Directions.Down]};
+                break;
+            case Directions.Left:
+                this.movement = {...this.movement, ...Movements[Directions.Left]};
+                break;
         }
     }
 
@@ -93,14 +125,21 @@ export class Robot extends Graphic {
         newRobot.boundingRect = getBoundingRect(newRobot.position, newRobot.size);
         //pokud nastane kolize, tak ho nemenim
         if (walls.some(w => this.isCollision(w,newRobot))){
-            console.log(this.movement.type);
             //Urceni noveho pohybu
-            if (this.movement.type === MovementType.Random) 
-                this.randomMove();
-            else if (this.movement.type === MovementType.RightHand) 
-                this.rightHandMove();
-            else  
-                this.leftHandMove();
+            switch (this.movement.type) {
+                case MovementType.Random: 
+                    this.randomMove(); 
+                    break;
+                case MovementType.RightHand: 
+                    this.rightHandMove(); 
+                    break;
+                case MovementType.LeftHand: 
+                    this.leftHandMove(); 
+                    break;
+                default:
+                    this.customMove();
+                    break;
+            }
             return this;
         }
         //pokus nenastane kolize, tak ho menim

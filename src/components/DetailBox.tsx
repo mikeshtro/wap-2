@@ -3,8 +3,9 @@ import { Size } from '../models/IGraphic';
 import { Graphic } from '../models/Graphic';
 import { EditBox } from './EditBox';
 import { FaSave } from 'react-icons/fa';
-import { GraphicType, MovementType, OperationType } from '../models/enums';
-import { Button, Card, Col, Dropdown, DropdownButton, Row } from 'react-bootstrap';
+import { Directions, GraphicType, MovementType, OperationType } from '../models/enums';
+import { Button, Card, Col, Row } from 'react-bootstrap';
+import { MovementBox } from './MovementBox';
 
 interface props {
     operation: number,
@@ -17,7 +18,8 @@ interface props {
     movementType: MovementType
 }
 
-export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: props) => {
+export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , 
+    setMovementType, movementType}: props) => {
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
         switch (graphic.type) {
@@ -89,18 +91,10 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
                                     : selectedGraphic?.type === GraphicType.Robot ? 
                                         <Card className='myCard-prim'>
                                             <Card.Body>
-                                                <Row>
-                                                    <Col>
-                                                        <h5>Druh pohybu:</h5>
-                                                    </Col>
-                                                    <Col>
-                                                        <DropdownButton title={movementType} onSelect={setMovementType}>
-                                                            <Dropdown.Item value={MovementType.Random} eventKey="Random">Random</Dropdown.Item>
-                                                            <Dropdown.Item value={MovementType.RightHand} eventKey="Right Hand">Right hand</Dropdown.Item>
-                                                            <Dropdown.Item value={MovementType.LeftHand} eventKey="Left Hand">Left hand</Dropdown.Item>
-                                                        </DropdownButton>
-                                                    </Col>
-                                                </Row>
+                                                <MovementBox
+                                                    movementType={movementType}    
+                                                    setMovementType={setMovementType}
+                                                />
                                             </Card.Body>
                                         </Card>
                                     : null
@@ -122,6 +116,14 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
                                         <EditBox
                                             size={size}
                                             setSize={setSize}
+                                        />
+                                    </Card.Body>
+                                </Card> : operation === OperationType.Robot ? 
+                                <Card className='myCard-prim'>
+                                    <Card.Body>
+                                        <MovementBox
+                                            movementType={movementType}    
+                                            setMovementType={setMovementType}
                                         />
                                     </Card.Body>
                                 </Card> : null

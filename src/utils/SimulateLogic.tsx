@@ -1,4 +1,5 @@
 import { graphics } from "../components/Canvas";
+import { Directions, MovementType } from "../models/enums";
 import { Finish } from "../models/Finish";
 import { Graphic } from "../models/Graphic";
 import { Robot } from "../models/Robot";
@@ -23,4 +24,9 @@ export function isAllDone() : boolean {
     const robots = graphics.filter(g => g instanceof Robot) as Robot[];
     const finishes = graphics.filter(g => g instanceof Finish) as Finish[];
     return robots.every(r => r.isInFinish(finishes));
+}
+
+export function turning(key : string) {
+    const robots = graphics.filter(g => g instanceof Robot && g.movement.type === MovementType.Custom) as Robot[];
+    robots.forEach(r => r.setDirection(key as Directions));
 }
