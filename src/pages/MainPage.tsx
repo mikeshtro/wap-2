@@ -36,6 +36,9 @@ export function MainPage() {
         if (graphic instanceof Wall) {
             setSize(graphic.size);
         }
+        if (graphic instanceof Robot) {
+            setMovementType(graphic.movement.type);
+        }
     }
 
     function updateSize() {

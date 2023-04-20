@@ -1,5 +1,5 @@
-import { Row, Col, DropdownButton, Dropdown, Button } from "react-bootstrap";
-import { Directions, MovementType } from "../models/enums";
+import { Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
+import { MovementType } from "../models/enums";
 
 
 interface props {

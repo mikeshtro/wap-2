@@ -3,7 +3,7 @@ import { Size } from '../models/IGraphic';
 import { Graphic } from '../models/Graphic';
 import { EditBox } from './EditBox';
 import { FaSave } from 'react-icons/fa';
-import { Directions, GraphicType, MovementType, OperationType } from '../models/enums';
+import { GraphicType, MovementType, OperationType } from '../models/enums';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { MovementBox } from './MovementBox';
 

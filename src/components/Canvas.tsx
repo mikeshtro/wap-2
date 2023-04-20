@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
-import {  Directions, MovementType, OperationType } from '../models/enums';
+import { MovementType, OperationType } from '../models/enums';
 import { createBarrier, detectGraphic, drawSelected, redraw } from '../utils/GraphicsLogic';
 import { Graphic } from '../models/Graphic';
 import {Wall} from '../models/Wall';
