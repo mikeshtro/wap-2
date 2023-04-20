@@ -1,3 +1,9 @@
+/**
+ * Komponenta zobrazující informační panel
+ * @category Components
+ * @module DetailBox
+ */
+
 import { MdDelete } from 'react-icons/md'
 import { Size } from '../models/IGraphic';
 import { Graphic } from '../models/Graphic';
@@ -8,40 +14,69 @@ import { Button, Card, Col, Row } from 'react-bootstrap';
 import { MovementBox } from './MovementBox';
 
 /**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty DetailBox
  * @category Components
- * @interface props
- * @property {number} operation Type of selected operation
- * @property {Graphic | null} selectedGraphic Selected graphic
- * @property {Size} size Size
- * @property {MovementType} movementType Movement type of selected Robot
- * @method removeClicked 
- * @method saveClicked
- * @method setSize 
- * @method setMovementType
  */
-interface props {
+interface detailBoxProps {
+    /**
+     * Input - Drží aktuální vybranou operaci
+     */
     operation: number,
+    /**
+     * Input - Drží aktuálně vybranou grafiku
+     */
     selectedGraphic: Graphic | null,
+    /**
+     * Output - Uživatel smazal vybranou grafiku
+     * @returns {void}
+     */
     removeClicked(): void,
+    /**
+     * Output - Uživatel uložil upravenou vlastnost
+     * @returns {void}
+     */
     saveClicked(): void,
+    /**
+     * Output - Uživatel nastavil novou velikost grafiky
+     * @param _ {_ | Size} Velikost grafiky
+     * @returns {void}
+     */
     setSize(_: Size): void,
+    /**
+     * Input - Drží aktuální velikost grafiky
+     */
     size: Size,
+    /**
+     * Output - Uživatel vybral novou grafiku
+     * @param graphic {Graphic | null} Vybraná grafika
+     * @returns {void}
+     */
     setMovementType(_ : string |null): void,
+    /**
+     * Output - Změna stavu simulace
+     * @param _ {boolean} Nová hodnota (nepotřebné, protože boolean -> invertovat)
+     * @returns {void}     
+     */
+    setStatus(_ : boolean) : void,
+    /**
+     * Input - Zvolený způsob pohybu nového robota
+     */
     movementType: MovementType
 }
 
 /**
- * Right side detail box
- * @category Components
- * @module DetailBox
+ * Komponenta DetailBox
+ * @function DetailBox
+ * @param props {detailBoxProps} 
+ * @returns ReactElement
  */
-export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: props) => {
+export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: detailBoxProps) => {
 
     /**
-     * Converts graphic to String
+     * Provádí převod grafiky na název
      * @exports DetailBox
      * @function graphicToText
-     * @property {Graphic | null} graphic Selected graphic
+     * @param graphic {Graphic | null} Vybraná grafika
      * @returns String
      */
     function graphicToText(graphic: Graphic | null): String {
@@ -54,10 +89,10 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
     }
 
     /**
-     * Converts number to String
+     * Převádí číslo vybrané operace na text
      * @exports DetailBox
      * @function operationToText
-     * @property {Number} operation Selected operation
+     * @param operation {Number} Vybraná operace
      * @returns String
      */
     function operationToText(operation: Number): String {

@@ -1,22 +1,27 @@
 import { Graphic } from "./Graphic";
 import { Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
-/**
- * Wall
- * @category Models
- * @alias Wall
- * @class 
- * @extends Graphic
- */
+
 export class Wall extends Graphic {
+   /**
+    * Vytvoří grafiku stěny 
+    * @constructs
+    * @param position {Position} Pozice kam vložit grafiku
+    * @param size {Size} Velikost grafiky
+    * @param ctx {CanvasRenderingContext2D | undefined} Kontext plátna pro vykreslení
+    * 
+    * @category Models
+    * @extends Graphic
+    * @classdesc Grafika znázorňující stěnu
+    */
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D | undefined = undefined){
         super(position, size, GraphicType.Wall, ctx);
         this.draw();
     }
 
     /**
-     * Draws a Wall
-     * @returns void
+     * Vykreslí daný objekt na plátno
+     * @returns {void}
      */
     draw(){
         if (!this.ctx) return;
@@ -25,9 +30,9 @@ export class Wall extends Graphic {
     }
 
     /**
-     * Set size of a Wall
-     * @param {Size} size Size to be set
-     * @returns void
+     * Nastaví velikost stěny
+     * @param {Size} size Velikost na kterou má být stěna nastavena
+     * @returns {void}
      */
     setSize(size:Size){
         this.size = size;

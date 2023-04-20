@@ -1,6 +1,6 @@
 /**
  * Komponenta zobrazující webové plátno s logikou grafik
- * @category Component
+ * @category Components
  * @module Canvas
  */
 
@@ -17,7 +17,7 @@ import { isAllDone, simulateStep, someCollision, turning } from '../utils/Simula
 
 /**
  * Rozhraní jednotlivých vstupů a výstupů komponenty Canvas
- * @category Component
+ * @category Components
  */
 interface canvasProps {
     /**
@@ -31,7 +31,7 @@ interface canvasProps {
     /**
      * Output - Uživatel vybral novou grafiku
      * @param graphic {Graphic | null} Vybraná grafika
-     * @returns void
+     * @returns {void}
      */
     callSelected(graphic : Graphic | null) : void,
     /**

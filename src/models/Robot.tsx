@@ -5,29 +5,24 @@ import { Wall } from "./Wall";
 import { Directions, GraphicType, MovementType } from "./enums";
 
 /**
- * Pohyb robota
+ * Rozhraní jednotlivých vstupů a výstupů modelu Robot
  * @category Models
- * @interface
- * @property {MovementType} type Type of movement of robot
- * @property {Directions} curDirection Direction of robot
- * @property {number} dx Movement amount in x
- * @property {number} dy Movement amount in y
  */
 interface Movement {
     /**
-     * Druh pohybu
+     * Input - Druh pohybu
      */
     type: MovementType,
     /**
-     * Aktuální směr pohybu
+     * Input - Aktuální směr pohybu
      */
     curDirection: Directions,
     /**
-     * Posun v ose x
+     * Input - Posun v ose x
      */
     dx: number,
     /**
-     * Posun v ose y
+     * Input - Posun v ose y
      */
     dy: number
 }
@@ -38,24 +33,24 @@ const Movements = {
     [Directions.Down]: {curDirection: Directions.Down, dx: 0, dy: 2},
     [Directions.Left]: {curDirection: Directions.Left, dx: -2, dy: 0}
 }
-/**
- * Grafika znázorňující robota
- * @category Models
- * @alias Robot
- * @class 
- * @extends Graphic
- * @property {HTMLImageElement} image Obrázek robota
- * @property {Movement} movement Pohyb robota
- */
+
 export class Robot extends Graphic {
     image : HTMLImageElement;
     movement : Movement;
 
     /**
      * Vytvoří grafiku, které nastaví výchozí hodnoty velikosti a přednačte si obrázek, který zobrazuje robota. Následně grafiku i vykreslí
+     * @constructs
      * @param position {Position} Pozice kam vložit grafiku
      * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
      * @param moveType {MovementType} Způsb pohybu robota
+     * 
+     * @category Models
+     * @extends Graphic
+     * @classdesc Grafika znázorňující cíl
+     * 
+     * @property {HTMLImageElement} image Obrázek cíle
+     * @property {Movement} movement Druh pohybu
      */
     constructor(position : Position, ctx : CanvasRenderingContext2D, moveType : MovementType = MovementType.Random){
         super(position, {width: 32, height: 32}, GraphicType.Robot, ctx);
@@ -70,9 +65,9 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Set movement type of given robot
-     * @param {MovementType} movementType Type of movement
-     * @returns void
+     * Nastaví druh pohybu robota
+     * @param {MovementType} movementType Druh pohybu robota
+     * @returns {void}
      */
     setMovementType(movementType: MovementType) {
         this.movement.type = movementType;
@@ -81,8 +76,8 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Draws a robot
-     * @returns void
+     * Nakreslí robota
+     * @returns {void}
      */
     draw(){
         if (!this.ctx) return;
@@ -90,8 +85,8 @@ export class Robot extends Graphic {
     }
     
     /**
-     * Set next random direction when robot colides
-     * @returns void
+     * Nastaví náhodně nový směr pohybu jakmile robot narazí do překážky
+     * @returns {void}
      */
     randomMove() {
         const index = Math.floor(Math.random() * 4);
@@ -112,8 +107,8 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Turn tobot 90 degrees right when robot colides
-     * @returns void
+     * Otočí robota o 90 stupňů doprava jakmile narazí 
+     * @returns {void}
      */
     rightHandMove() {
         switch (this.movement.curDirection) {
@@ -133,8 +128,8 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Turn tobot 90 degrees left when robot colides
-     * @returns void
+     * Otočí robota o 90 stupňů doleva jakmile narazí
+     * @returns {void}
      */
     leftHandMove() {
         switch (this.movement.curDirection) {
@@ -153,6 +148,10 @@ export class Robot extends Graphic {
         }
     }
 
+    /**
+     * Otočí robota na stranu na kterou je zmáčknutá šipka
+     * @returns {void}
+     */
     customMove() {
         switch (this.movement.curDirection) {
             case Directions.Up:
@@ -171,9 +170,9 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Moves with robot
-     * @param {Wall[]} walls List of walls
-     * @returns Robot
+     * Posune robota
+     * @param {Wall[]} walls Seznam zdí
+     * @returns {Robot}
      */
     move(walls : Wall[]) : Robot {
         var newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
@@ -204,19 +203,29 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Checks if Robot colides with Finish
-     * @param {Graphic[]} finishes List of finishes
-     * @returns boolean
+     * Nastaví nový směr robota
+     * @param {Directions} direction Nový směr 
+     * @returns {void}
+     */
+    setDirection(direction: Directions) {
+        this.movement.curDirection = direction;
+        this.movement = {...this.movement, ...Movements[direction]};
+    }
+
+    /**
+     * Kontroluje, zda robot dorazil do cíle
+     * @param {Graphic[]} finishes Seznam cílů
+     * @returns {boolean}
      */
     isInFinish(finishes : Graphic[]) : boolean{
         return finishes.some(f => this.isCollision(f));
     }
 
     /**
-     * Checks if Robot colides with graphic
-     * @param {Graphic} graphic2 Graphic to check
-     * @param {Robot} graphic1 Robot to check
-     * @returns boolean
+     * Kontroluje zda robot nenarazil do překážky
+     * @param {Graphic} graphic2 Grafika pro porovnání
+     * @param {Robot} graphic1 Zkoumaný robot
+     * @returns {boolean}
      */
     isCollision(graphic2 : Graphic, graphic1 : Robot = this){
         return !((graphic1.boundingRect.y2 < graphic2.boundingRect.y1) ||

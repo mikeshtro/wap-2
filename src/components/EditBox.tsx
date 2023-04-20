@@ -1,23 +1,36 @@
+/**
+ * Komponenta zobrazující upravující box
+ * @category Components
+ * @module EditBox
+ */
+
 import { Form, InputGroup } from 'react-bootstrap';
 import { Size } from '../models/IGraphic';
 
 /**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty EditBox
  * @category Components
- * @interface props
- * @property {Size} size Size
- * @method setSize
  */
-interface props {
+interface editBoxProps {
+    /**
+     * Input - Drží aktuální velikost vybrané grafiky
+     */
     size: Size,
+    /**
+     * Output - Uživatel nastavil novou velikost grafiky
+     * @param _ {_ | Size} Velikost grafiky
+     * @returns {void}
+     */
     setSize(_: Size): void
 }
 
 /**
- * Size edit box
- * @category Components
- * @module EditBox
+ * Komponenta EditBox
+ * @function EditBox
+ * @param props {editBoxProps} 
+ * @returns ReactElement
  */
-export const EditBox = ({size, setSize}:props) => 
+export const EditBox = ({size, setSize}:editBoxProps) => 
 {
    return (
     <div>

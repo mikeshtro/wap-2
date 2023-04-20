@@ -1,14 +1,36 @@
+/**
+ * Komponenta zobrazující druhy pohybů
+ * @category Components
+ * @module MovementBox
+ */
+
 import { Row, Col, DropdownButton, Dropdown } from "react-bootstrap";
 import { MovementType } from "../models/enums";
 
-
-interface props {
+/**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty MovementBox
+ * @category Components
+ */
+interface movementBoxProps {
+    /**
+     * Output - Uživatel vybral nový druh pohybu
+     * @param _ {string | null} Vybraný pohyb
+     * @returns {void}
+     */
     setMovementType(_ : string |null): void,
+    /**
+     * Input - Zvolený druh pohybu
+     */
     movementType: MovementType
 }
 
-
-export const MovementBox = ({movementType, setMovementType}:props) => 
+/**
+ * Komponenta MovementBox
+ * @function MovementBox
+ * @param props {movementBoxProps} 
+ * @returns ReactElement
+ */
+export const MovementBox = ({movementType, setMovementType}:movementBoxProps) => 
 {
    return (
         <div>

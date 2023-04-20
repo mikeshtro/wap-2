@@ -1,49 +1,62 @@
+/**
+ * Komponenta zobrazující ukládací box s logikou map
+ * @category Components
+ * @module MapSaver
+ */
+
 import { useState, useEffect } from 'react';
 import { exist, loadData, removeData, saveData } from "../utils/StorageLogic"
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { Button, ButtonGroup, Card, Modal } from 'react-bootstrap';
 
 /**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty MapSaver
  * @category Components
- * @interface props
- * @method loaded
  */
-interface props {
+interface mapSaverProps {
+    /**
+     * Output - Uživatel načetl vybranou mapu
+     * @returns {void}
+     */
     loaded() : void;
 }
 
 const ids = [1,2,3,4,5];
 
 /**
- * Saver of created map
- * @category Components
- * @module MapSaver
+ * Komponenta MapSaver
+ * @function MapSaver
+ * @param props {mapSaverProps} 
+ * @returns ReactElement
  */
-export const MapSaver = ({loaded} : props) => {
+export const MapSaver = ({loaded} : mapSaverProps) => {
     const [visible, setVisible] = useState<boolean>(false);
     const [exists, setExists] = useState<boolean[]>([false,false,false,false,false]);
 
+    /**
+     * Po vybrání slotu se obsadí vybraný slot
+     * @exports MapSaver
+     * @function useEffect
+     */
     useEffect(() => {
         getOccupied();
     // eslint-disable-next-line
     }, [])
 
     /**
-     * Checks if given slot is empty
+     * Obsadí daný slot
      * @exports MapSaver
      * @function getOccupied
-     * @returns void
      */
     function getOccupied(){
         setExists(exists.map((_, i) => exist(i + 1)));
     }
 
     /**
-     * Saves created map
+     * Uloží mapu na daný slot
      * @exports MapSaver
      * @function saveMap
-     * @property {number} index Saves created map on given index
-     * @returns void
+     * @param index {number} Vybraný slot
      */
     function saveMap(index : number){
         saveData(index);
@@ -51,11 +64,10 @@ export const MapSaver = ({loaded} : props) => {
     }
 
     /**
-     * Loads stored map
+     * Načte mapu z daného slotu
      * @exports MapSaver
      * @function loadMap
-     * @property {number} index Loads created map from given index
-     * @returns void
+     * @param index {number} Vybraný slot
      */
     function loadMap(index : number){
         loadData(index);
@@ -64,11 +76,10 @@ export const MapSaver = ({loaded} : props) => {
     }
 
     /**
-     * Removes stored map
+     * Odstraní mapu z daného slotu
      * @exports MapSaver
      * @function removeMap
-     * @property {number} index Removes stored map on given index
-     * @returns void
+     * @param index {number} Vybraný slot
      */
     function removeMap(index: number){
         removeData(index);
