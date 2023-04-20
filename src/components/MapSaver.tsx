@@ -27,7 +27,7 @@ const ids = [1,2,3,4,5];
  * Komponenta MapSaver
  * @function MapSaver
  * @param props {mapSaverProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const MapSaver = ({loaded} : mapSaverProps) => {
     const [visible, setVisible] = useState<boolean>(false);

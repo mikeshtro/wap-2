@@ -49,7 +49,7 @@ export class Robot extends Graphic {
      * @extends Graphic
      * @classdesc Grafika znázorňující cíl
      * 
-     * @property {HTMLImageElement} image Obrázek cíle
+     * @property {HTMLImageElement} image Obrázek robota
      * @property {Movement} movement Druh pohybu
      */
     constructor(position : Position, ctx : CanvasRenderingContext2D, moveType : MovementType = MovementType.Random){
@@ -76,7 +76,7 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Nakreslí robota
+     * Nakreslí robota na plátno
      * @returns {void}
      */
     draw(){
@@ -85,7 +85,7 @@ export class Robot extends Graphic {
     }
     
     /**
-     * Nastaví náhodně nový směr pohybu jakmile robot narazí do překážky
+     * Nastaví náhodně nový směr pohybu
      * @returns {void}
      */
     randomMove() {
@@ -107,7 +107,7 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Otočí robota o 90 stupňů doprava jakmile narazí 
+     * Otočí robota o 90 stupňů doprava
      * @returns {void}
      */
     rightHandMove() {
@@ -128,7 +128,7 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Otočí robota o 90 stupňů doleva jakmile narazí
+     * Otočí robota o 90 stupňů doleva
      * @returns {void}
      */
     leftHandMove() {
@@ -149,7 +149,7 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Otočí robota na stranu na kterou je zmáčknutá šipka
+     * Posune robota správným směrem, který byl dříve nastaven
      * @returns {void}
      */
     customMove() {
@@ -170,9 +170,9 @@ export class Robot extends Graphic {
     }
 
     /**
-     * Posune robota
-     * @param {Wall[]} walls Seznam zdí
-     * @returns {Robot}
+     * Provede posun daného robota podle jeho směru pohybu, v případě kolize změní směr dle vybrané strategie
+     * @param {Wall[]} walls Seznam zdí na mapě
+     * @returns {Robot} Robot s novou pozicí
      */
     move(walls : Wall[]) : Robot {
         var newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
@@ -214,8 +214,8 @@ export class Robot extends Graphic {
 
     /**
      * Kontroluje, zda robot dorazil do cíle
-     * @param {Graphic[]} finishes Seznam cílů
-     * @returns {boolean}
+     * @param {Graphic[]} finishes Seznam cílů na mapě
+     * @returns {boolean} True pokud je v cíli
      */
     isInFinish(finishes : Graphic[]) : boolean{
         return finishes.some(f => this.isCollision(f));
@@ -225,7 +225,7 @@ export class Robot extends Graphic {
      * Kontroluje zda robot nenarazil do překážky
      * @param {Graphic} graphic2 Grafika pro porovnání
      * @param {Robot} graphic1 Zkoumaný robot
-     * @returns {boolean}
+     * @returns {boolean} True pokud narazil
      */
     isCollision(graphic2 : Graphic, graphic1 : Robot = this){
         return !((graphic1.boundingRect.y2 < graphic2.boundingRect.y1) ||

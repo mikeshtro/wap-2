@@ -28,7 +28,7 @@ interface editBoxProps {
  * Komponenta EditBox
  * @function EditBox
  * @param props {editBoxProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const EditBox = ({size, setSize}:editBoxProps) => 
 {

@@ -28,7 +28,7 @@ interface movementBoxProps {
  * Komponenta MovementBox
  * @function MovementBox
  * @param props {movementBoxProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const MovementBox = ({movementType, setMovementType}:movementBoxProps) => 
 {

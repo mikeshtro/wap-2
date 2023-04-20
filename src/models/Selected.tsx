@@ -4,7 +4,7 @@ import { GraphicType } from "./enums";
 
 export class Selected extends Graphic {
    /**
-    * Vybraná grafika
+    * Vytvoří grafiku a vykreslí ji
     * @constructs
     * @param position {Position} Pozice kam vložit grafiku
     * @param size {Size} Velikost grafiky
@@ -12,7 +12,7 @@ export class Selected extends Graphic {
     * 
     * @category Models
     * @extends Graphic
-    * @classdesc Vybraná grafika 
+    * @classdesc Grafika znázorňující označení grafiky
     */
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D){
         super(position, size, GraphicType.Selected, ctx);

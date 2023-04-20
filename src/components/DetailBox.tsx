@@ -68,7 +68,7 @@ interface detailBoxProps {
  * Komponenta DetailBox
  * @function DetailBox
  * @param props {detailBoxProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: detailBoxProps) => {
 
@@ -77,7 +77,7 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
      * @exports DetailBox
      * @function graphicToText
      * @param graphic {Graphic | null} Vybraná grafika
-     * @returns String
+     * @returns {String}
      */
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
@@ -93,7 +93,7 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
      * @exports DetailBox
      * @function operationToText
      * @param operation {Number} Vybraná operace
-     * @returns String
+     * @returns {String}
      */
     function operationToText(operation: Number): String {
         //0 kurzor

@@ -92,7 +92,7 @@ var selectedGraphic : Graphic | null = null;
  * Komponenta Canvas
  * @function Canvas
  * @param props {canvasProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : canvasProps) => {
     const [cursor, setCursor] = useState("default");

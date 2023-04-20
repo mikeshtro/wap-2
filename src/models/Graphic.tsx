@@ -16,7 +16,7 @@ export abstract class Graphic {
     abstract draw() : void;
 
    /**
-    * Abstraktní třída Grafiky, definuje abstraktní metodu draw 
+    * Vytvoří základní grafiku a vypočíta její ohraničení
     * @constructs
     * @param position {Position} Pozice kam vložit grafiku
     * @param size {Size} Velikost grafického prvku
@@ -29,7 +29,7 @@ export abstract class Graphic {
     * 
     * @property {Position} position Pozice kam vložit grafiku
     * @property {Size} size Velikost grafického prvku
-    * @property {BoundingRect} boundingRect Obrázek cíle
+    * @property {BoundingRect} boundingRect Ohraničení obrázku
     * @property {CanvasRenderingContext2D} ctx Kontext plátna pro vykreslení
     * @property {GraphicType} type Typ grafického prvku
     */

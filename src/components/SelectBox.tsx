@@ -35,7 +35,7 @@ interface selectBoxProps {
  * Komponenta SelectBox
  * @function SelectBox
  * @param props {selectBoxProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const SelectBox = ({operation, setOperation, status} : selectBoxProps) => {
     return (

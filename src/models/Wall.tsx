@@ -4,7 +4,7 @@ import { GraphicType } from "./enums";
 
 export class Wall extends Graphic {
    /**
-    * Vytvoří grafiku stěny 
+    * Vytvoří grafiku stěny a vykreslí ji
     * @constructs
     * @param position {Position} Pozice kam vložit grafiku
     * @param size {Size} Velikost grafiky

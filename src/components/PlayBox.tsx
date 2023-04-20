@@ -33,7 +33,7 @@ interface playBoxProps {
  * Komponenta PlayBox
  * @function PlayBox
  * @param props {playBoxProps} 
- * @returns ReactElement
+ * @returns {ReactElement}
  */
 export const PlayBox = ({setStatus, status, operation} : playBoxProps) => {
     return (
