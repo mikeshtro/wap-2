@@ -3,11 +3,26 @@ import { Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
 
 export class Selected extends Graphic {
+   /**
+    * Vytvoří grafiku a vykreslí ji
+    * @constructs
+    * @param position {Position} Pozice kam vložit grafiku
+    * @param size {Size} Velikost grafiky
+    * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
+    * 
+    * @category Models
+    * @extends Graphic
+    * @classdesc Grafika znázorňující označení grafiky
+    */
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D){
         super(position, size, GraphicType.Selected, ctx);
         this.draw();
     }
 
+    /**
+     * Vykreslí daný objekt na plátno
+     * @returns {void}
+     */
     draw(){
         if (!this.ctx) return;
         this.ctx.setLineDash([6]);

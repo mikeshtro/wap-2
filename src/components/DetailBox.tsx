@@ -1,23 +1,84 @@
+/**
+ * Komponenta zobrazující informační panel
+ * @category Components
+ * @module DetailBox
+ */
+
 import { MdDelete } from 'react-icons/md'
 import { Size } from '../models/IGraphic';
 import { Graphic } from '../models/Graphic';
 import { EditBox } from './EditBox';
 import { FaSave } from 'react-icons/fa';
 import { GraphicType, MovementType, OperationType } from '../models/enums';
-import { Button, Card, Col, Dropdown, DropdownButton, Row } from 'react-bootstrap';
+import { Button, Card, Col, Row } from 'react-bootstrap';
+import { MovementBox } from './MovementBox';
 
-interface props {
+/**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty DetailBox
+ * @category Components
+ */
+interface detailBoxProps {
+    /**
+     * Input - Drží aktuální vybranou operaci
+     */
     operation: number,
+    /**
+     * Input - Drží aktuálně vybranou grafiku
+     */
     selectedGraphic: Graphic | null,
+    /**
+     * Output - Uživatel smazal vybranou grafiku
+     * @returns {void}
+     */
     removeClicked(): void,
+    /**
+     * Output - Uživatel uložil upravenou vlastnost
+     * @returns {void}
+     */
     saveClicked(): void,
+    /**
+     * Output - Uživatel nastavil novou velikost grafiky
+     * @param _ {_ | Size} Velikost grafiky
+     * @returns {void}
+     */
     setSize(_: Size): void,
+    /**
+     * Input - Drží aktuální velikost grafiky
+     */
     size: Size,
+    /**
+     * Output - Uživatel vybral novou grafiku
+     * @param graphic {Graphic | null} Vybraná grafika
+     * @returns {void}
+     */
     setMovementType(_ : string |null): void,
+    /**
+     * Output - Změna stavu simulace
+     * @param _ {boolean} Nová hodnota (nepotřebné, protože boolean -> invertovat)
+     * @returns {void}     
+     */
+    setStatus(_ : boolean) : void,
+    /**
+     * Input - Zvolený způsob pohybu nového robota
+     */
     movementType: MovementType
 }
 
-export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: props) => {
+/**
+ * Komponenta DetailBox
+ * @function DetailBox
+ * @param props {detailBoxProps} 
+ * @returns {ReactElement}
+ */
+export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: detailBoxProps) => {
+
+    /**
+     * Provádí převod grafiky na název
+     * @exports DetailBox
+     * @function graphicToText
+     * @param graphic {Graphic | null} Vybraná grafika
+     * @returns {String}
+     */
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
         switch (graphic.type) {
@@ -27,6 +88,13 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
         }
     }
 
+    /**
+     * Převádí číslo vybrané operace na text
+     * @exports DetailBox
+     * @function operationToText
+     * @param operation {Number} Vybraná operace
+     * @returns {String}
+     */
     function operationToText(operation: Number): String {
         //0 kurzor
         switch (operation) {
@@ -89,18 +157,10 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
                                     : selectedGraphic?.type === GraphicType.Robot ? 
                                         <Card className='myCard-prim'>
                                             <Card.Body>
-                                                <Row>
-                                                    <Col>
-                                                        <h5>Druh pohybu:</h5>
-                                                    </Col>
-                                                    <Col>
-                                                        <DropdownButton title={movementType} onSelect={setMovementType}>
-                                                            <Dropdown.Item value={MovementType.Random} eventKey="Random">Random</Dropdown.Item>
-                                                            <Dropdown.Item value={MovementType.RightHand} eventKey="Right Hand">Right hand</Dropdown.Item>
-                                                            <Dropdown.Item value={MovementType.LeftHand} eventKey="Left Hand">Left hand</Dropdown.Item>
-                                                        </DropdownButton>
-                                                    </Col>
-                                                </Row>
+                                                <MovementBox
+                                                    movementType={movementType}    
+                                                    setMovementType={setMovementType}
+                                                />
                                             </Card.Body>
                                         </Card>
                                     : null
@@ -122,6 +182,14 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
                                         <EditBox
                                             size={size}
                                             setSize={setSize}
+                                        />
+                                    </Card.Body>
+                                </Card> : operation === OperationType.Robot ? 
+                                <Card className='myCard-prim'>
+                                    <Card.Body>
+                                        <MovementBox
+                                            movementType={movementType}    
+                                            setMovementType={setMovementType}
                                         />
                                     </Card.Body>
                                 </Card> : null
