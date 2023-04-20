@@ -12,7 +12,11 @@ You will also see any lint errors in the console.
 
 ### `npm install`
 
-Install all dependencies.
+Install all dependencies. Some dependencies need `--legacy-peer-deps` (npm v7 install peer dependencies by default).
+
+### `npm run docs`
+
+Generate documentation.
 
 ## CI/CD
 

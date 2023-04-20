@@ -6,7 +6,8 @@ import { MainPage } from './pages/MainPage';
 import { ToastContainer } from 'react-toastify';
 
 /**
- * Zakladni okno aplikace
+ * Základní okno aplikace, které importuje veškeré styly a vkládá 
+ * komponentu z react-toastify pro zobrazování notifikací
  * @category Main
  * @requires MainPage
  * @returns ReactElement

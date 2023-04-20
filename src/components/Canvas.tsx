@@ -1,3 +1,9 @@
+/**
+ * Komponenta zobrazující webové plátno s logikou grafik
+ * @category Component
+ * @module Canvas
+ */
+
 import React, {useEffect, useState} from 'react';
 import { Position, Size } from '../models/IGraphic';
 import { MovementType, OperationType } from '../models/enums';
@@ -9,24 +15,72 @@ import { Robot } from '../models/Robot';
 import { Error, Success, Warning } from '../utils/Messages';
 import { isAllDone, simulateStep, someCollision, turning } from '../utils/SimulateLogic';
 
-interface props {
+/**
+ * Rozhraní jednotlivých vstupů a výstupů komponenty Canvas
+ * @category Models
+ */
+interface canvasProps {
+    /**
+     * Input - Trigger, který se provolá pokud nastane událost ke smazání grafiky
+     */
     removeTrigger : boolean,
+    /**
+     * Input - Drží aktuální vypranou operaci
+     */
     operation: OperationType,
+    /**
+     * Output - Uživatel vybral novou grafiku
+     * @param graphic {Graphic | null} Vybraná grafika
+     * @returns void
+     */
     callSelected(graphic : Graphic | null) : void,
+    /**
+     * Input - Zvolená velikost nové zdi
+     */
     selectedSize: Size,
+    /**
+     * Input - Zda aktuálně běží simulace (True - běží, False - neběží)
+     */
     status: boolean,
+    /**
+     * Output - Změna stavu simulace
+     * @param _ {boolean} Nová hodnota (nepotřebné, protože boolean -> invertovat)
+     */
     setStatus(_ : boolean) : void,
+    /**
+     * Input - Zvolený způsob pohybu nového robota
+     */
     movementType: MovementType
 }
 
-export var ctx : CanvasRenderingContext2D;
 const ratio = 16/9;
 const width = Math.min(1200, window.innerWidth - 30);
+
+/**
+ * Velikost vykreslovacího plátna
+ * @type Size
+ */
 export const canvasSize : Size = {width: width, height: width/ratio};
+
+/**
+ * Veškerý seznam grafik
+ * @type Graphic[]
+ */
 export var graphics : Graphic[] = [];
+
+/**
+ * Setter pro globální seznam grafik
+ * @param g {Graphic[]} Grafiky, které mají být nastaveny
+ */
 export function setGraphics(g : Graphic[]){
     graphics = g;
 }
+
+/**
+ * Kontext pro kreslení na plátno
+ * @type CanvasRenderingContext2D
+ */
+export var ctx : CanvasRenderingContext2D;
 
 const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
 
@@ -35,21 +89,21 @@ var dragStartPosition : Position | null = null;
 var selectedGraphic : Graphic | null = null;
 
 /**
- * Class description
- * @category Component
- * @module Canvas
+ * Komponenta Canvas
+ * @function Canvas
+ * @param props {canvasProps} 
+ * @returns ReactElement
  */
-export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : props) => {
+export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : canvasProps) => {
     const [cursor, setCursor] = useState("default");
     const canvas = React.useRef<HTMLCanvasElement | null>(null);     
 
-    const handler = (e: KeyboardEvent) => {
-        if (playStatus && keys.some(k => k === e.key)) {
-            turning(e.key);
-        }
-    };
-
-    //On component mounted
+    /**
+     * Po vytvoření canvasu se vytvoří implicitní zdi jako bariéry a začne se poslouchat
+     * kliknutí na klávesy.
+     * @exports Canvas
+     * @function canvas
+     */
     useEffect(() => {
         const _ctx = canvas.current?.getContext('2d');
         if (_ctx){
@@ -59,8 +113,11 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         window.addEventListener('keydown', handler, false);
     }, [canvas])
 
-    
-    //Remove 
+    /**
+     * Po vyvolání removeTrigger se vybraná grafika smaže
+     * @exports Canvas
+     * @function removeTrigger
+     */
     useEffect(() => {
         if (!selectedGraphic) return;
         graphics.splice(graphics.indexOf(selectedGraphic), 1);
@@ -69,8 +126,12 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         callSelected(null);
     // eslint-disable-next-line
     },[removeTrigger]);
-
-    //Simulate
+    
+    /**
+     * Po změně statusu simulace se simulace buď spustí nebo zastaví
+     * @exports Canvas
+     * @function status
+     */
     useEffect(() => {
         playStatus = status;
         if (playStatus){
@@ -80,7 +141,11 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
     // eslint-disable-next-line
     }, [status])
 
-    //Unselect graphic
+    /**
+     * Po změně vybrané operace na vytváření se zruší vybraná grafika
+     * @exports Canvas
+     * @function operation
+     */
     useEffect(() => {
         if (operation !== OperationType.Cursor) unselectGraphic();
     // eslint-disable-next-line
@@ -90,10 +155,21 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
 
 
     /**
-     * neco random
+     * Pokud je simulace spuštěna změní směr robotů
      * @exports Canvas
-     * @function Simulace
-     * @returns void
+     * @function handler
+     * @param e {KeyboardEvent} Zmáčknutá klávesa
+     */
+    function handler(e: KeyboardEvent){
+        if (playStatus && keys.some(k => k === e.key)) {
+            turning(e.key);
+        }
+    };
+
+    /**
+     * Provádí pohyb robotů na plátně dokud nedojdou všichni do cíle, nebo dokud není simulace pozastavena uživatelem.
+     * @exports Canvas
+     * @function simulate
      */
     async function simulate(){
         if (!correct()) return;
@@ -112,6 +188,12 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }
     }
 
+    /**
+     * Zjistí, zda je vložen cíl a robot
+     * @exports Canvas
+     * @function correct
+     * @returns {boolean} True pokud je vložen alespoň 1 cíl a 1 robot
+     */
     function correct() : boolean {
         if (! graphics.some(g => g instanceof Robot)){
             Error('Není vložen žádný robot!');
@@ -126,10 +208,23 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         return true;
     }
 
+    /**
+     * Přepočítá pozici kliknutí podle umístění canvasu
+     * @exports Canvas
+     * @function getPosition
+     * @param e {React.MouseEvent} Kliknutí myší
+     * @returns {Position} Souřadnice v rámci canvasu
+     */
     function getPosition(e : React.MouseEvent) : Position {
         return {x: (e.clientX - (canvas.current?.offsetLeft ?? 0)),y : (e.clientY - (canvas.current?.offsetTop ?? 0))};;
     }
 
+    /**
+     * Podle vybrané operace vloží novou grafiku nebo vybere již existující
+     * @exports Canvas
+     * @function onClick
+     * @param e {React.MouseEvent} Kliknutí myší
+     */
     function onClick(e : React.MouseEvent){
         const position = getPosition(e);
         if (!ctx) return;
@@ -153,6 +248,12 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }     
     }
 
+    /**
+     * Najde vybranou grafiku a uloží si počáteční souřadně drag and dropu + změní kurzor myši
+     * @exports Canvas
+     * @function dragMouseDown
+     * @param e {React.MouseEvent} Kliknutí myší (stlačení dolů)
+     */
     function dragMouseDown(e : React.MouseEvent){
         if(operation !== OperationType.Cursor || !selectedGraphic) return;
         const position = getPosition(e)
@@ -162,6 +263,12 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }
     }
 
+    /**
+     * Posune posouvanou grafiku o aktuální pozici myši - původní pozici při drag and drop + změní kurzor myši zpět
+     * @exports Canvas
+     * @function dragMouseUp
+     * @param e {React.MouseEvent} Kliknutí myší (puštění tlačítka)
+     */
     function dragMouseUp(e : React.MouseEvent){
         setCursor("default");
 
@@ -178,12 +285,23 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         dragStartPosition = null;
     }
 
+    /**
+     * Zruší označení grafiky a smaže grafiku, která označuje označenou grafiku
+     * @exports Canvas
+     * @function unselectGraphic
+     */
     function unselectGraphic(){
         selectedGraphic = null;
         redraw();
         callSelected(null);
     }
 
+    /**
+     * Vybere grafiku podle souřednice parametru
+     * @exports Canvas
+     * @function selectGraphic
+     * @param position {Position} Pozice, kam uživatel kliknul v rámci Canvasu
+     */
     function selectGraphic(position : Position){
         unselectGraphic();
         if (playStatus) return;

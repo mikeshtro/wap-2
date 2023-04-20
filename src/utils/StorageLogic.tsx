@@ -1,3 +1,10 @@
+/**
+ * Obsahuje veškerou logiku ukládání map
+ * @module StorageLogic
+ * @category Utils
+ */
+
+
 import { ctx, graphics, setGraphics } from "../components/Canvas";
 import { Finish } from "../models/Finish";
 import { Graphic } from "../models/Graphic";
@@ -8,6 +15,11 @@ import { GraphicType } from "../models/enums";
 import { redraw } from "./GraphicsLogic";
 import { Error, Success } from "./Messages";
 
+/**
+ * Uloží veškerá data o mapě do slotu podle parametru
+ * @category Utils
+ * @param id {number} Číslo slotu
+ */
 export function saveData(id : number){
     const data : IGraphicSave[] = graphics.filter(g => g.type !== GraphicType.Selected).map(g => 
         {
@@ -25,6 +37,11 @@ export function saveData(id : number){
     Success('Mapa byla uložena.');
 }
 
+/**
+ * Načte veškerá data o mapě ze slotu podle parametru
+ * @category Utils
+ * @param id {number} Číslo slotu
+ */
 export function loadData(id : number){
     const data = localStorage.getItem(id.toString());
     if (!data || data === ""){
@@ -51,11 +68,22 @@ export function loadData(id : number){
     Success('Mapa byla načtena.');
 }
 
+/**
+ * Smaže veškerá data o mapě ze slotu podle parametru
+ * @category Utils
+ * @param id {number} Číslo slotu
+ */
 export function removeData(id : number){
     localStorage.removeItem(id.toString());
     Success("Mapa byla smazána.")
 }
 
+/**
+ * Zjistí zda existují data ve slotu podle parametru
+ * @category Utils
+ * @param id {number} Číslo slotu
+ * @returns {boolean} True pokud je v tomto slotu něco uloženo
+ */
 export function exist(id : number) : boolean {
     const data = localStorage.getItem(id.toString());
     return (data !== null && data !== "");

@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 /**
- * DOM Koren aplikace
+ * DOM Kořen aplikace
  * @category Main
  */
 const root = ReactDOM.createRoot(

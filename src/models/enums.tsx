@@ -1,5 +1,5 @@
 /**
- * Class description
+ * Možné operace, které si může uživatel zvolit
  * @category Models
  * @enum {number}
  */

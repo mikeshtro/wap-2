@@ -1,3 +1,15 @@
+/**
+ * Hlavni obrazovka aplikace, která zajišťuje komunikaci mezi jednotlivými 
+ * komponentami
+ * @category Pages
+ * @module MainPage
+ * @requires PlayBox
+ * @requires SelectBox
+ * @requires Canvas
+ * @requires DetailBox
+ * @requires MapSaver
+ */
+
 import { useState } from "react";
 import { Graphic } from "../models/Graphic";
 import { DetailBox } from "../components/DetailBox";
@@ -13,14 +25,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import { Robot } from "../models/Robot";
 
 /**
- * Hlavni obrazovka aplikace
- * @category Pages
- * @module MainPage
- * @requires PlayBox
- * @requires SelectBox
- * @requires Canvas
- * @requires DetailBox
- * @requires MapSaver
+ * Komponenta MainPage
+ * @function MainPage
  * @returns ReactElement
  */
 export function MainPage() {
@@ -31,6 +37,12 @@ export function MainPage() {
     const [size, setSize] = useState<Size>({ width: 10, height: 10 });
     const [movementType, setMovementType] = useState<MovementType>(MovementType.Random);
 
+    /**
+     * Nastavuje hodnoty vybrané grafiky do UI komponent
+     * @exports MainPage
+     * @function setSelected
+     * @param graphic {Graphic} Která grafika je vybrána uživatelem
+     */
     function setSelected(graphic: Graphic) {
         setSelectedGraphic(graphic);
         if (graphic instanceof Wall) {
@@ -41,6 +53,12 @@ export function MainPage() {
         }
     }
 
+    /**
+     * Kontroluje nově nastavené rozměry a případně aktualizuje vybranou
+     * grafiku
+     * @exports MainPage
+     * @function updateSize
+     */
     function updateSize() {
         if (size.height < 10 || size.width < 10) {
             Error('Zeď musí mít minimální výšku a šířku 10');
@@ -53,17 +71,35 @@ export function MainPage() {
         }
     }
 
+    /**
+     * Nastaví aktualní operaci uživatele a případně nastaví
+     * výchozí velikost zdí
+     * @exports MainPage
+     * @function setDefaultSize
+     * @param operation {OperationType} Která operace je uživatelem vybrána
+     */
     function setDefaultSize(operation: OperationType) {
         setOperation(operation);
         if (OperationType.Wall === operation)
             setSize({ width: 10, height: 10 });
     }
 
+    /**
+     * Zastaví simulaci a zruší výběr uživatele
+     * @exports MainPage
+     * @function mapLoaded
+     */
     function mapLoaded(){
         setSelectedGraphic(null);
         setStatus(false);
     }
 
+    /**
+     * Aktualizuje způsob pohybu aktuálně vybraného robota
+     * @exports MainPage
+     * @function changeMovementType
+     * @param eventKey {string | null} Který způsob pohybu je vybrán
+     */
     const changeMovementType = (eventKey: string | null) => {
         setMovementType(eventKey as MovementType);
         if (selectedGraphic instanceof Robot) {

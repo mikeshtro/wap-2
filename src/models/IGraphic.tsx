@@ -1,10 +1,17 @@
 import { GraphicType, MovementType } from "./enums"
 /**
- * Class description
+ * Rozhraní znázorňující velikost grafiky
  * @category Models
+ * @interface
  */
 export interface Size {
+    /**
+     * Šířka
+     */
     width: number,
+    /**
+     * Výška
+     */
     height: number
 }
 /**
