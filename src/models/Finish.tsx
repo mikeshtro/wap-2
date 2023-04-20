@@ -5,16 +5,17 @@ import { GraphicType } from "./enums";
 /**
  * Grafika znázorňující cíl
  * @category Models
+ * @class 
+ * @alias Finish
  * @extends Graphic
+ * @property {HTMLImageElement} image Obrázek cíle
  */
 export class Finish extends Graphic {
-    /**
-     * Obrázek grafiky
-     */
     image : HTMLImageElement;
 
     /**
      * Vytvoří grafiku, které nastaví výchozí hodnoty velikosti a přednačte si obrázek, který zobrazuje cíl. Následně grafiku i vykreslí
+     * @constructor
      * @param position {Position} Pozice kam vložit grafiku
      * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
      */

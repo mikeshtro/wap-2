@@ -9,9 +9,11 @@ export enum OperationType {
     Finish,
     Robot
 }
+
 /**
- * Class description
+ * Typ grafiky
  * @category Models
+ * @enum {number}
  */
 export enum GraphicType {
     Wall,
@@ -19,9 +21,11 @@ export enum GraphicType {
     Robot,
     Selected
 }
+
 /**
- * Class description
+ * Typ pohybu robota
  * @category Models
+ * @enum {string}
  */
 export enum MovementType {
     Random = "Random",
@@ -29,9 +33,11 @@ export enum MovementType {
     LeftHand = "Left Hand",
     Custom = "Custom"
 }
+
 /**
- * Class description
+ * Směr pohybu robota
  * @category Models
+ * @enum {string}
  */
 export enum Directions {
     Up = "ArrowUp",

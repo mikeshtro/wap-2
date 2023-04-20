@@ -17,7 +17,7 @@ import { isAllDone, simulateStep, someCollision, turning } from '../utils/Simula
 
 /**
  * Rozhraní jednotlivých vstupů a výstupů komponenty Canvas
- * @category Models
+ * @category Component
  */
 interface canvasProps {
     /**
@@ -25,7 +25,7 @@ interface canvasProps {
      */
     removeTrigger : boolean,
     /**
-     * Input - Drží aktuální vypranou operaci
+     * Input - Drží aktuální vybranou operaci
      */
     operation: OperationType,
     /**

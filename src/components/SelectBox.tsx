@@ -5,6 +5,13 @@ import { Button, ButtonGroup} from 'react-bootstrap';
 
 const types: string[] = ["Kurzor", "Zeď", "Cíl", "Robot"];
 
+/**
+ * @category Components
+ * @interface props
+ * @property {boolean} status Simulation is running
+ * @property {OperationType} operation Operation type
+ * @method setOperation Nastavi operaci
+ */
 interface props {
     operation : OperationType,
     setOperation(_ : OperationType) : void,
@@ -12,8 +19,8 @@ interface props {
 }
 
 /**
- * Class description
- * @category Component
+ * Selection of operation
+ * @category Components
  * @module SelectBox
  */
 export const SelectBox = ({operation, setOperation, status} : props) => {

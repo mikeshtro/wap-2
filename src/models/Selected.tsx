@@ -2,8 +2,11 @@ import { Graphic } from "./Graphic";
 import { Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
 /**
- * Class description
+ * Selected
  * @category Models
+ * @alias Selected
+ * @class 
+ * @extends Graphic
  */
 export class Selected extends Graphic {
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D){
@@ -11,6 +14,9 @@ export class Selected extends Graphic {
         this.draw();
     }
 
+    /**
+     * Draws a selected graphic
+     */
     draw(){
         if (!this.ctx) return;
         this.ctx.setLineDash([6]);
