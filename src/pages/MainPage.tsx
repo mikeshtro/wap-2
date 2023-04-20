@@ -12,8 +12,18 @@ import { Size } from "../models/IGraphic";
 import { Col, Container, Row } from "react-bootstrap";
 import { Robot } from "../models/Robot";
 
-
-function MainPage() {
+/**
+ * Hlavni obrazovka aplikace
+ * @category Pages
+ * @module MainPage
+ * @requires PlayBox
+ * @requires SelectBox
+ * @requires Canvas
+ * @requires DetailBox
+ * @requires MapSaver
+ * @returns ReactElement
+ */
+export function MainPage() {
     const [status, setStatus] = useState<boolean>(false);
     const [operation, setOperation] = useState<OperationType>(0);
     const [selectedGraphic, setSelectedGraphic] = useState<Graphic | null>(null);
@@ -99,7 +109,4 @@ function MainPage() {
             </Row>
         </Container>
     );
-
 }
-
-export default MainPage;

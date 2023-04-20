@@ -17,6 +17,11 @@ interface props {
     movementType: MovementType
 }
 
+/**
+ * Class description
+ * @category Component
+ * @module DetailBox
+ */
 export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: props) => {
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";

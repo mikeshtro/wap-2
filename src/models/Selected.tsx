@@ -1,7 +1,10 @@
 import { Graphic } from "./Graphic";
 import { Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
-
+/**
+ * Class description
+ * @category Models
+ */
 export class Selected extends Graphic {
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D){
         super(position, size, GraphicType.Selected, ctx);

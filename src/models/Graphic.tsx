@@ -1,7 +1,10 @@
 import { getBoundingRect } from "../utils/GraphicsLogic";
 import { BoundingRect, Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
-
+/**
+ * Class description
+ * @category Models
+ */
 export abstract class Graphic {
     position : Position;
     size : Size;

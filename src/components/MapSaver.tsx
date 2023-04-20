@@ -9,6 +9,11 @@ interface props {
 
 const ids = [1,2,3,4,5];
 
+/**
+ * Class description
+ * @category Component
+ * @module MapSaver
+ */
 export const MapSaver = ({loaded} : props) => {
     const [visible, setVisible] = useState<boolean>(false);
     const [exists, setExists] = useState<boolean[]>([false,false,false,false,false]);

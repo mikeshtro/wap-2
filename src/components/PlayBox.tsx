@@ -8,6 +8,11 @@ interface props {
     operation: OperationType
 }
 
+/**
+ * Class description
+ * @category Component
+ * @module PlayBox
+ */
 export const PlayBox = ({setStatus, status, operation} : props) => {
     return (
         <ButtonGroup className="margin-10">
