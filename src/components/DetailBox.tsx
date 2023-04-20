@@ -53,12 +53,6 @@ interface detailBoxProps {
      */
     setMovementType(_ : string |null): void,
     /**
-     * Output - Změna stavu simulace
-     * @param _ {boolean} Nová hodnota (nepotřebné, protože boolean -> invertovat)
-     * @returns {void}     
-     */
-    setStatus(_ : boolean) : void,
-    /**
      * Input - Zvolený způsob pohybu nového robota
      */
     movementType: MovementType
