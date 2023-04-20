@@ -2,6 +2,11 @@ import { Graphic } from "./Graphic";
 import { Position } from "./IGraphic";
 import { GraphicType } from "./enums";
 
+
+/**
+ * Class description
+ * @category Models
+ */
 export class Finish extends Graphic {
     image : HTMLImageElement;
 

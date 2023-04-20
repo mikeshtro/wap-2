@@ -1,7 +1,10 @@
 import { Graphic } from "./Graphic";
 import { Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
-
+/**
+ * Class description
+ * @category Models
+ */
 export class Wall extends Graphic {
     constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D | undefined = undefined){
         super(position, size, GraphicType.Wall, ctx);

@@ -11,6 +11,11 @@ interface props {
     status : boolean
 }
 
+/**
+ * Class description
+ * @category Component
+ * @module SelectBox
+ */
 export const SelectBox = ({operation, setOperation, status} : props) => {
     return (
         <ButtonGroup vertical={window.innerWidth > 1468} className='margin-bottom'>

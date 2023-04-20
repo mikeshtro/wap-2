@@ -34,6 +34,11 @@ var playStatus = false;
 var dragStartPosition : Position | null = null;
 var selectedGraphic : Graphic | null = null;
 
+/**
+ * Class description
+ * @category Component
+ * @module Canvas
+ */
 export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : props) => {
     const [cursor, setCursor] = useState("default");
     const canvas = React.useRef<HTMLCanvasElement | null>(null);     
@@ -83,6 +88,13 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
 
 
 
+
+    /**
+     * neco random
+     * @exports Canvas
+     * @function Simulace
+     * @returns void
+     */
     async function simulate(){
         if (!correct()) return;
         if (someCollision()){

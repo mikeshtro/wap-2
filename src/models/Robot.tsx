@@ -17,7 +17,10 @@ const Movements = {
     [Directions.Down]: {curDirection: Directions.Down, dx: 0, dy: 2},
     [Directions.Left]: {curDirection: Directions.Left, dx: -2, dy: 0}
 }
-
+/**
+ * Class description
+ * @category Models
+ */
 export class Robot extends Graphic {
     image : any;
     movement : Movement;
