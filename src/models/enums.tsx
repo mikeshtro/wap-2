@@ -1,5 +1,5 @@
 /**
- * Class description
+ * Type of operation
  * @category Models
  * @enum {number}
  */
@@ -9,9 +9,11 @@ export enum OperationType {
     Finish,
     Robot
 }
+
 /**
- * Class description
+ * Type of graphic
  * @category Models
+ * @enum {number}
  */
 export enum GraphicType {
     Wall,
@@ -19,18 +21,22 @@ export enum GraphicType {
     Robot,
     Selected
 }
+
 /**
- * Class description
+ * Type of movement
  * @category Models
+ * @enum {number}
  */
 export enum MovementType {
     Random = "Random",
     RightHand = "Right Hand",
     LeftHand = "Left Hand"
 }
+
 /**
- * Class description
+ * Direction of movement
  * @category Models
+ * @enum {number}
  */
 export enum Directions {
     Up = "up",

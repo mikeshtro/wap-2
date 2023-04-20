@@ -3,6 +3,11 @@ import { exist, loadData, removeData, saveData } from "../utils/StorageLogic"
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { Button, ButtonGroup, Card, Modal } from 'react-bootstrap';
 
+/**
+ * @category Components
+ * @interface props
+ * @method loaded
+ */
 interface props {
     loaded() : void;
 }
@@ -10,8 +15,8 @@ interface props {
 const ids = [1,2,3,4,5];
 
 /**
- * Class description
- * @category Component
+ * Saver of created map
+ * @category Components
  * @module MapSaver
  */
 export const MapSaver = ({loaded} : props) => {
@@ -23,21 +28,48 @@ export const MapSaver = ({loaded} : props) => {
     // eslint-disable-next-line
     }, [])
 
+    /**
+     * Checks if given slot is empty
+     * @exports MapSaver
+     * @function getOccupied
+     * @returns void
+     */
     function getOccupied(){
         setExists(exists.map((_, i) => exist(i + 1)));
     }
-    
+
+    /**
+     * Saves created map
+     * @exports MapSaver
+     * @function saveMap
+     * @property {number} index Saves created map on given index
+     * @returns void
+     */
     function saveMap(index : number){
         saveData(index);
         getOccupied();
     }
 
+    /**
+     * Loads stored map
+     * @exports MapSaver
+     * @function loadMap
+     * @property {number} index Loads created map from given index
+     * @returns void
+     */
     function loadMap(index : number){
         loadData(index);
         setVisible(false);
         loaded();
     }
 
+    /**
+     * Removes stored map
+     * @exports MapSaver
+     * @function removeMap
+     * @property {number} index Removes stored map on given index
+     * @returns void
+     */
     function removeMap(index: number){
         removeData(index);
         getOccupied();

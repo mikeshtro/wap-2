@@ -9,6 +9,17 @@ import { Robot } from '../models/Robot';
 import { Error, Success, Warning } from '../utils/Messages';
 import { isAllDone, simulateStep, someCollision } from '../utils/SimulateLogic';
 
+
+/**
+ * @category Components
+ * @interface props
+ * @property {boolean} removeTrigger
+ * @property {OperationType} operation Operation type
+ * @property {Size} selectedSize Selected size
+ * @property {boolean} status Simulation is running
+ * @method callSelected 
+ * @method setStatus
+ */
 interface props {
     removeTrigger : boolean,
     operation: OperationType,
@@ -32,8 +43,8 @@ var dragStartPosition : Position | null = null;
 var selectedGraphic : Graphic | null = null;
 
 /**
- * Class description
- * @category Component
+ * Canvas
+ * @category Components
  * @module Canvas
  */
 export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus} : props) => {
@@ -79,7 +90,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
 
 
     /**
-     * neco random
+     * Runs simulation
      * @exports Canvas
      * @function Simulace
      * @returns void
@@ -101,6 +112,12 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }
     }
 
+    /**
+     * Checks if is a Robot and Finish created
+     * @exports Canvas
+     * @function correct
+     * @returns boolean
+     */
     function correct() : boolean {
         if (! graphics.some(g => g instanceof Robot)){
             Error('Není vložen žádný robot!');
@@ -115,10 +132,24 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         return true;
     }
 
+    /**
+     * Gets position of mouse cursor
+     * @exports Canvas
+     * @function getPosition
+     * @property {React.MouseEvent} e Mouse event
+     * @returns Position
+     */
     function getPosition(e : React.MouseEvent) : Position {
         return {x: (e.clientX - (canvas.current?.offsetLeft ?? 0)),y : (e.clientY - (canvas.current?.offsetTop ?? 0))};;
     }
 
+    /**
+     * When is clicked
+     * @exports Canvas
+     * @function onClick
+     * @property {React.MouseEvent} e Mouse event
+     * @returns void
+     */ 
     function onClick(e : React.MouseEvent){
         const position = getPosition(e);
         if (!ctx) return;
@@ -142,6 +173,13 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }     
     }
 
+    /**
+     * When is mouse pressed
+     * @exports Canvas
+     * @function dragMouseDown
+     * @property {React.MouseEvent} e Mouse event
+     * @returns void
+     */
     function dragMouseDown(e : React.MouseEvent){
         if(operation !== OperationType.Cursor || !selectedGraphic) return;
         const position = getPosition(e)
@@ -151,6 +189,13 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         }
     }
 
+    /**
+     * When is mouse lifted
+     * @exports Canvas
+     * @function dragMouseUp
+     * @property {React.MouseEvent} e Mouse event
+     * @returns void
+     */
     function dragMouseUp(e : React.MouseEvent){
         setCursor("default");
 
@@ -167,12 +212,25 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         dragStartPosition = null;
     }
 
+    /**
+     * Unselect graphic when clicked in blank palce
+     * @exports Canvas
+     * @function unselectGraphic
+     * @returns void
+     */
     function unselectGraphic(){
         selectedGraphic = null;
         redraw();
         callSelected(null);
     }
 
+    /**
+     * Select graphic when clicked on given position 
+     * @exports Canvas
+     * @function selectGraphic
+     * @property {Position} position Mouse pocition
+     * @returns void
+     */
     function selectGraphic(position : Position){
         unselectGraphic();
         if (playStatus) return;

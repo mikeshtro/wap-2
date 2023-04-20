@@ -4,8 +4,12 @@ import { GraphicType } from "./enums";
 
 
 /**
- * Class description
+ * Graphic Finish
  * @category Models
+ * @class 
+ * @alias Finish
+ * @extends Graphic
+ * @property {HTMLImageElement} image Image for Robot or Finish 
  */
 export class Finish extends Graphic {
     image : HTMLImageElement;
@@ -20,6 +24,12 @@ export class Finish extends Graphic {
         this.image = image;
     }
 
+    /**
+     * Draws a Finish
+     * @exports Finish
+     * @function draw
+     * @returns void
+     */
     draw(){
         if (!this.ctx) return;
         this.ctx.drawImage(this.image, this.position.x, this.position.y);

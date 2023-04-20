@@ -4,6 +4,14 @@ import { Position } from "./IGraphic";
 import { Wall } from "./Wall";
 import { Directions, GraphicType, MovementType } from "./enums";
 
+/**
+ * @category Models
+ * @interface Movement
+ * @property {MovementType} type Type of movement of robot
+ * @property {Directions} curDirection Direction of robot
+ * @property {number} dx Movement amount in x
+ * @property {number} dy Movement amount in y
+ */
 interface Movement {
     type: MovementType,
     curDirection: Directions,
@@ -18,8 +26,13 @@ const Movements = {
     [Directions.Left]: {curDirection: Directions.Left, dx: -2, dy: 0}
 }
 /**
- * Class description
+ * Robot
  * @category Models
+ * @alias Robot
+ * @class 
+ * @extends Graphic
+ * @property {any} image Image of robot
+ * @property {Movement} movement Movement of robot
  */
 export class Robot extends Graphic {
     image : any;
@@ -38,17 +51,36 @@ export class Robot extends Graphic {
         this.movement = {type: moveType, ...Movements[Directions.Up]};
     }
 
+    /**
+     * Set movement type of given robot
+     * @exports Robot
+     * @function setMovementType
+     * @property {MovementType} movementType Type of movement
+     * @returns void
+     */
     setMovementType(movementType: MovementType) {
         this.movement.type = movementType;
         //reset pohybu pri zmeny nastaveni
         this.movement = {...this.movement, ...Movements[Directions.Up]};
     }
 
+    /**
+     * Draws a robot
+     * @exports Robot
+     * @function draw
+     * @returns void
+     */
     draw(){
         if (!this.ctx) return;
         this.ctx.drawImage(this.image, this.position.x, this.position.y);
     }
     
+    /**
+     * Set next random direction when robot colides
+     * @exports Robot
+     * @function randomMove
+     * @returns void
+     */
     randomMove() {
         const index = Math.floor(Math.random() * 4);
         switch (index) {
@@ -67,6 +99,12 @@ export class Robot extends Graphic {
         }
     }
 
+    /**
+     * Turn tobot 90 degrees right when robot colides
+     * @exports Robot
+     * @function rightHandMove
+     * @returns void
+     */
     rightHandMove() {
         if (this.movement.curDirection === Directions.Up) {
             this.movement = {...this.movement, ...Movements[Directions.Right]};
@@ -79,6 +117,12 @@ export class Robot extends Graphic {
         }
     }
 
+    /**
+     * Turn tobot 90 degrees left when robot colides
+     * @exports Robot
+     * @function leftHandMove
+     * @returns void
+     */
     leftHandMove() {
         if (this.movement.curDirection === Directions.Up) {
             this.movement = {...this.movement, ...Movements[Directions.Left]};
@@ -91,6 +135,13 @@ export class Robot extends Graphic {
         }
     }
 
+    /**
+     * Moves with robot
+     * @exports Robot
+     * @function move
+     * @property {Wall[]} walls List of walls
+     * @returns Robot
+     */
     move(walls : Wall[]) : Robot {
         var newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
         newRobot.boundingRect = getBoundingRect(newRobot.position, newRobot.size);
@@ -112,10 +163,25 @@ export class Robot extends Graphic {
         return this;
     }
 
-    isInFinish(finishes : Graphic[]){
+    /**
+     * Checks if Robot colides with Finish
+     * @exports Robot
+     * @function isInFinish
+     * @property {Graphic[]} finishes List of finishes
+     * @returns boolean
+     */
+    isInFinish(finishes : Graphic[]) : boolean{
         return finishes.some(f => this.isCollision(f));
     }
 
+    /**
+     * Checks if Robot colides with graphic
+     * @exports Robot
+     * @function isCollision
+     * @property {Graphic} graphic2 Graphic to check
+     * @property {Robot} graphic1 Robot to check
+     * @returns boolean
+     */
     isCollision(graphic2 : Graphic, graphic1 : Robot = this){
         return !((graphic1.boundingRect.y2 < graphic2.boundingRect.y1) ||
                 (graphic1.boundingRect.y1 > graphic2.boundingRect.y2) ||

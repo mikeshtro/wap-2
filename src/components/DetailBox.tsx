@@ -6,6 +6,18 @@ import { FaSave } from 'react-icons/fa';
 import { GraphicType, MovementType, OperationType } from '../models/enums';
 import { Button, Card, Col, Dropdown, DropdownButton, Row } from 'react-bootstrap';
 
+/**
+ * @category Components
+ * @interface props
+ * @property {number} operation Type of selected operation
+ * @property {Graphic | null} selectedGraphic Selected graphic
+ * @property {Size} size Size
+ * @property {MovementType} movementType Movement type of selected Robot
+ * @method removeClicked 
+ * @method saveClicked
+ * @method setSize 
+ * @method setMovementType
+ */
 interface props {
     operation: number,
     selectedGraphic: Graphic | null,
@@ -18,11 +30,19 @@ interface props {
 }
 
 /**
- * Class description
- * @category Component
+ * Right side detail box
+ * @category Components
  * @module DetailBox
  */
 export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClicked, setSize, size , setMovementType, movementType}: props) => {
+
+    /**
+     * Converts graphic to String
+     * @exports DetailBox
+     * @function graphicToText
+     * @property {Graphic | null} graphic Selected graphic
+     * @returns String
+     */
     function graphicToText(graphic: Graphic | null): String {
         if (!graphic) return "---";
         switch (graphic.type) {
@@ -32,6 +52,13 @@ export const DetailBox = ({ operation, selectedGraphic, removeClicked, saveClick
         }
     }
 
+    /**
+     * Converts number to String
+     * @exports DetailBox
+     * @function operationToText
+     * @property {Number} operation Selected operation
+     * @returns String
+     */
     function operationToText(operation: Number): String {
         //0 kurzor
         switch (operation) {

@@ -1,12 +1,22 @@
 import { Form, InputGroup } from 'react-bootstrap';
 import { Size } from '../models/IGraphic';
 
-
+/**
+ * @category Components
+ * @interface props
+ * @property {Size} size Size
+ * @method setSize
+ */
 interface props {
     size: Size,
     setSize(_: Size): void
 }
 
+/**
+ * Size edit box
+ * @category Components
+ * @module EditBox
+ */
 export const EditBox = ({size, setSize}:props) => 
 {
    return (

@@ -31,6 +31,13 @@ export function MainPage() {
     const [size, setSize] = useState<Size>({ width: 10, height: 10 });
     const [movementType, setMovementType] = useState<MovementType>(MovementType.Random);
 
+    /**
+     * Sets size of Wall
+     * @exports MainPage
+     * @function setSelected
+     * @property {Graphic} graphic Graphic to be selected
+     * @returns void
+     */
     function setSelected(graphic: Graphic) {
         setSelectedGraphic(graphic);
         if (graphic instanceof Wall) {
@@ -38,6 +45,12 @@ export function MainPage() {
         }
     }
 
+    /**
+     * Updates size of Wall
+     * @exports MainPage
+     * @function updateSize
+     * @returns void
+     */
     function updateSize() {
         if (size.height < 10 || size.width < 10) {
             Error('Zeď musí mít minimální výšku a šířku 10');
@@ -50,17 +63,37 @@ export function MainPage() {
         }
     }
 
+    /**
+     * Sets default size of Wall
+     * @exports MainPage
+     * @function setDefaultSize
+     * @property {OperationType} operation Selected operation
+     * @returns void
+     */
     function setDefaultSize(operation: OperationType) {
         setOperation(operation);
         if (OperationType.Wall === operation)
             setSize({ width: 10, height: 10 });
     }
 
+    /**
+     * Unselects graphic and stops simulation
+     * @exports MainPage
+     * @function mapLoaded
+     * @returns void
+     */
     function mapLoaded(){
         setSelectedGraphic(null);
         setStatus(false);
     }
 
+    /**
+     * Changes movement type of Robot
+     * @exports MainPage
+     * @function changeMovementType
+     * @property {string | null} eventKey Selected option
+     * @returns void
+     */
     const changeMovementType = (eventKey: string | null) => {
         setMovementType(eventKey as MovementType);
         if (selectedGraphic instanceof Robot) {

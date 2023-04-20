@@ -2,6 +2,13 @@ import { Button, ButtonGroup } from 'react-bootstrap';
 import { OperationType } from '../models/enums';
 import { FaPlay, FaStop } from 'react-icons/fa';
 
+/**
+ * @category Components
+ * @interface props
+ * @property {boolean} status Simulation is running
+ * @property {OperationType} operation Operation type
+ * @method setStatus
+ */
 interface props {
     setStatus(_ : boolean) : void,
     status : boolean,
@@ -9,8 +16,8 @@ interface props {
 }
 
 /**
- * Class description
- * @category Component
+ * Play and Stop component
+ * @category Components
  * @module PlayBox
  */
 export const PlayBox = ({setStatus, status, operation} : props) => {
