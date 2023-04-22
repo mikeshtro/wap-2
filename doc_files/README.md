@@ -39,6 +39,22 @@ Informační zdroj: [https://fkhadra.github.io/react-toastify](https://fkhadra.g
 ### JsDoc + better-docs
 Využit pro vygenerování této dokumentace.
 
+## Externí zdroje
+Byly použity následující ikony ze zdroje [flaticon](https://www.flaticon.com/) pro zobrazení jednotlivých grafik:
+- Robot: [flaticon/robot](https://www.flaticon.com/free-icon/robot_3570207?term=robot&page=1&position=26&origin=search&related_id=3570207)
+- Cíl: [flaticon/finish](https://www.flaticon.com/free-icon/flag_1531222?term=finish&page=1&position=21&origin=search&related_id=1531222)
+
+## Metody pohybů robotů
+- Random = Po naražení do překážky zvolí náhodně nový směr, kterým bude robot pokračovat.
+- Left Hand = Po naražení do překážky se robot otočí za levou ruku a bude tímto směrem pokračovat.
+- Right Hand = Po naražení do překážky se robot otočí za pravou rukou a bude tímto směrem pokračovat.
+- Custom = Robot mění směr dle stisknuté klávesy (šipky) na klávesnici, následně tímto směrem pokračuje do dalšího stisknutí klávesy. 
+
+## Objektový návrh grafik
+- Veškeré grafiky, které jde vkládat jsou navrhnuty podle následujícího diagramu tříd. To umožňuje snadnou modifikaci (přidání nového typu grafiky s vlastním
+chováním)
+![class diagram](wap.png)
+
 ## Práce jednotlivých členů
-- Evžen Gasta = 
-- David Vlasák =
+- Evžen Gasta = Volba vlastností grafik, pohyb robotů, dokumentace
+- David Vlasák = Vkládání grafik, posun grafik, překreslování při pohybu, ukládání/načítání map
