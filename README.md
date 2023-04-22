@@ -12,7 +12,7 @@ You will also see any lint errors in the console.
 
 ### `npm install`
 
-Install all dependencies. Some dependencies need `--legacy-peer-deps` (npm v7 install peer dependencies by default).
+Install all dependencies. If it does not work, try: `npm install --legacy-peer-deps`
 
 ### `npm run docs`
 

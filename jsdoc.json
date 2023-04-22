@@ -10,6 +10,13 @@
     },
     "plugins": ["plugins/markdown", "better-docs/category", "better-docs/typescript"],
     "templates": {
+      "default": {
+        "staticFiles": {
+          "include": [
+            "./doc_files/wap.png"
+          ]
+        }
+      },
       "better-docs": {
         "name": "WAP - 2",
         "navLinks": [
