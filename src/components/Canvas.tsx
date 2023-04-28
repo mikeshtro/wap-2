@@ -66,7 +66,7 @@ export const canvasSize : Size = {width: width, height: width/ratio};
  * Veškerý seznam grafik
  * @type Graphic[]
  */
-export var graphics : Graphic[] = [];
+export let graphics : Graphic[] = [];
 
 /**
  * Setter pro globální seznam grafik
@@ -80,13 +80,13 @@ export function setGraphics(g : Graphic[]){
  * Kontext pro kreslení na plátno
  * @type CanvasRenderingContext2D
  */
-export var ctx : CanvasRenderingContext2D;
+export let ctx : CanvasRenderingContext2D;
 
 const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
 
-var playStatus = false;
-var dragStartPosition : Position | null = null;
-var selectedGraphic : Graphic | null = null;
+let playStatus = false;
+let dragStartPosition : Position | null = null;
+let selectedGraphic : Graphic | null = null;
 
 /**
  * Komponenta Canvas
