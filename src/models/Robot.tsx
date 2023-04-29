@@ -175,7 +175,7 @@ export class Robot extends Graphic {
      * @returns {Robot} Robot s novou pozicí
      */
     move(walls : Wall[]) : Robot {
-        var newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
+        let newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
         newRobot.boundingRect = getBoundingRect(newRobot.position, newRobot.size);
         //pokud nastane kolize, tak ho nemenim
         if (walls.some(w => this.isCollision(w,newRobot))){

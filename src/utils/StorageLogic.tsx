@@ -49,7 +49,7 @@ export function loadData(id : number){
         return;
     }
     const graphicsToSave = JSON.parse(data) as IGraphicSave[];
-    var finalData : Graphic[] = [];
+    let finalData : Graphic[] = [];
     graphicsToSave.forEach(g => {
         switch(g.type){
             case GraphicType.Wall:
