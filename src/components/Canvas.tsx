@@ -216,7 +216,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
      * @returns {Position} Souřadnice v rámci canvasu
      */
     function getPosition(e : React.MouseEvent) : Position {
-        return {x: (e.clientX - (canvas.current?.offsetLeft ?? 0)),y : (e.clientY - (canvas.current?.offsetTop ?? 0))};;
+        return {x: (e.pageX - (canvas.current?.offsetLeft ?? 0)),y : (e.pageY - (canvas.current?.offsetTop ?? 0))};;
     }
 
     /**
