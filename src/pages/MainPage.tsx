@@ -17,7 +17,6 @@ import { MapSaver } from "../components/MapSaver";
 import { Canvas } from "../components/Canvas";
 import { PlayBox } from "../components/PlayBox";
 import { SelectBox } from "../components/SelectBox";
-import { drawSelected, redraw } from "../utils/GraphicsLogic";
 import { Wall } from "../models/Wall";
 import { MovementType, OperationType } from "../models/enums";
 import { Size } from "../models/IGraphic";
@@ -33,9 +32,9 @@ export function MainPage() {
     const [status, setStatus] = useState<boolean>(false);
     const [operation, setOperation] = useState<OperationType>(0);
     const [selectedGraphic, setSelectedGraphic] = useState<Graphic | null>(null);
-    const [removeTrigger, setRemoveTrigger] = useState<boolean>(false);
     const [size, setSize] = useState<Size>({ width: 10, height: 10 });
     const [movementType, setMovementType] = useState<MovementType>(MovementType.Random);
+    const [graphics, setGraphics] = useState<Graphic[]>([]);
 
     /**
      * Nastavuje hodnoty vybrané grafiky do UI komponent
@@ -66,8 +65,8 @@ export function MainPage() {
         }
         if (selectedGraphic) {
             (selectedGraphic as Wall).setSize(size);
-            redraw();
-            drawSelected(selectedGraphic);
+            // TODO: mozna setGraphics
+            // TODO: canvas by mel ted prekresit grafiky i selectedGraphic
         }
     }
 
@@ -88,10 +87,23 @@ export function MainPage() {
      * Zastaví simulaci a zruší výběr uživatele
      * @exports MainPage
      * @function mapLoaded
+     * @param graphics {Graphic[]} seznam nactenych grafik
      */
-    function mapLoaded(){
+    function setLoadedGraphics(graphics: Graphic[]){
+        setGraphics(graphics);
         setSelectedGraphic(null);
         setStatus(false);
+    }
+
+    /**
+     * Odstraní vybranou grafiku ze seznamu všech grafik 
+     */
+    function removeGraphic(): void {
+        if (!selectedGraphic) return;
+        const index = graphics.indexOf(selectedGraphic);
+        const newGraphics = [graphics.slice(0, index), graphics.slice(index + 1)].flat();
+        setGraphics(newGraphics);
+        setSelectedGraphic(null);
     }
 
     /**
@@ -125,19 +137,21 @@ export function MainPage() {
                 <Col sm align="center">
                     <Canvas
                         operation={operation}
+                        selectedGraphic={selectedGraphic}
                         callSelected={setSelected}
-                        removeTrigger={removeTrigger}
                         selectedSize={size}
                         status={status}
                         setStatus={setStatus}
                         movementType={movementType}
+                        graphics={graphics}
+                        setGraphics={setGraphics}
                         />
                 </Col>
                 <Col sm align="left">
                     <DetailBox
                         operation={operation}
                         selectedGraphic={selectedGraphic}
-                        removeClicked={() => setRemoveTrigger(!removeTrigger)}
+                        removeClicked={() => removeGraphic()}
                         setSize={setSize}
                         saveClicked={updateSize}
                         size={size}
@@ -147,7 +161,7 @@ export function MainPage() {
                 </Col>
             </Row>
             <Row align="center">
-                <MapSaver loaded={mapLoaded}/>
+                <MapSaver setLoadedGraphics={setLoadedGraphics} graphics={graphics}/>
             </Row>
         </Container>
     );

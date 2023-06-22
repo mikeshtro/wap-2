@@ -1,4 +1,4 @@
-import { getBoundingRect } from "../utils/GraphicsLogic";
+import { getBoundingRect } from "../utils/Rectangle";
 import { BoundingRect, Position, Size } from "./IGraphic";
 import { GraphicType } from "./enums";
 
@@ -6,14 +6,13 @@ export abstract class Graphic {
     position : Position;
     size : Size;
     boundingRect : BoundingRect;
-    ctx?: CanvasRenderingContext2D;
     type: GraphicType;
 
     /**
      * Abstraktní metoda pro vykreslení grafiky
      * @returns {void}
      */
-    abstract draw() : void;
+    abstract draw(ctx: CanvasRenderingContext2D) : void;
 
    /**
     * Vytvoří základní grafiku a vypočíta její ohraničení
@@ -21,7 +20,6 @@ export abstract class Graphic {
     * @param position {Position} Pozice kam vložit grafiku
     * @param size {Size} Velikost grafického prvku
     * @param type {GraphicType} Typ grafického prvku
-    * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
     * 
     * @category Models
     * @abstract
@@ -33,11 +31,10 @@ export abstract class Graphic {
     * @property {CanvasRenderingContext2D} ctx Kontext plátna pro vykreslení
     * @property {GraphicType} type Typ grafického prvku
     */
-    constructor(position : Position, size : Size, type: GraphicType, ctx : CanvasRenderingContext2D | undefined = undefined){
+    constructor(position : Position, size : Size, type: GraphicType) {
         this.position = position;
         this.size = size;
         this.boundingRect = getBoundingRect(this.position, this.size);
-        this.ctx = ctx;
         this.type = type;
     }
 

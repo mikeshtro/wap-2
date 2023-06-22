@@ -1,4 +1,4 @@
-import { getBoundingRect } from "../utils/GraphicsLogic";
+import { getBoundingRect } from "../utils/Rectangle";
 import { Graphic } from "./Graphic";
 import { Position } from "./IGraphic";
 import { Wall } from "./Wall";
@@ -35,14 +35,13 @@ const Movements = {
 }
 
 export class Robot extends Graphic {
-    image : HTMLImageElement;
+    image : HTMLImageElement | undefined;
     movement : Movement;
 
     /**
      * Vytvoří grafiku, které nastaví výchozí hodnoty velikosti a přednačte si obrázek, který zobrazuje robota. Následně grafiku i vykreslí
      * @constructs
      * @param position {Position} Pozice kam vložit grafiku
-     * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
      * @param moveType {MovementType} Způsb pohybu robota
      * 
      * @category Models
@@ -52,14 +51,8 @@ export class Robot extends Graphic {
      * @property {HTMLImageElement} image Obrázek robota
      * @property {Movement} movement Druh pohybu
      */
-    constructor(position : Position, ctx : CanvasRenderingContext2D, moveType : MovementType = MovementType.Random){
-        super(position, {width: 32, height: 32}, GraphicType.Robot, ctx);
-        const image = new Image();
-        image.src = "/assets/robot.png";
-        image.onload = function () {
-            ctx.drawImage(image, position.x, position.y);
-        }
-        this.image = image;
+    constructor(position : Position, moveType : MovementType = MovementType.Random){
+        super(position, {width: 32, height: 32}, GraphicType.Robot);
 
         this.movement = {type: moveType, ...Movements[Directions.Up]};
     }
@@ -77,11 +70,20 @@ export class Robot extends Graphic {
 
     /**
      * Nakreslí robota na plátno
+     * @param ctx {CanvasRenderingContext2D} Kontext plátna pro vykreslení
      * @returns {void}
      */
-    draw(){
-        if (!this.ctx) return;
-        this.ctx.drawImage(this.image, this.position.x, this.position.y);
+    draw(ctx: CanvasRenderingContext2D){
+        if (this.image == null) {
+            const image = new Image();
+            image.src = "/assets/robot.png";
+            image.onload = () => {
+                ctx.drawImage(image, this.position.x, this.position.y);
+            }
+            this.image = image;
+        } else {
+            ctx.drawImage(this.image, this.position.x, this.position.y);
+        }
     }
     
     /**
@@ -175,6 +177,7 @@ export class Robot extends Graphic {
      * @returns {Robot} Robot s novou pozicí
      */
     move(walls : Wall[]) : Robot {
+        console.log(this.movement.dx, this.movement.dy);
         let newRobot = {...this, position : {x: this.position.x + this.movement.dx, y: this.position.y + this.movement.dy}};
         newRobot.boundingRect = getBoundingRect(newRobot.position, newRobot.size);
         //pokud nastane kolize, tak ho nemenim

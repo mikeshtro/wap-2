@@ -4,34 +4,21 @@
  * @category Utils
  */
 
-import { canvasSize, ctx, graphics } from "../components/Canvas";
+import { canvasSize } from "../components/Canvas";
 import { Graphic } from "../models/Graphic";
-import { BoundingRect, Position, Size } from "../models/IGraphic";
+import { Position} from "../models/IGraphic";
 import { Selected } from "../models/Selected";
 import { Wall } from "../models/Wall";
 
-/**
- * Vypočítá bounding rect dle parametrů grafiky
- * @category Utils
- * @param position {Position} Jaká je aktuální pozice grafiky
- * @param size {Size} Jaká je aktuální velikost grafiky
- * @returns {BoundingRect} Bounding rect dané grafiky
- */
-export function getBoundingRect(position : Position, size: Size) : BoundingRect{
-    return {
-        x1: position.x, 
-        x2: position.x + size.width, 
-        y1: position.y, 
-        y2: position.y + size.height};
-}
 
 /**
  * Detekuje grafiku dle pozice
  * @category Utils
  * @param position {Position} Na jaké pozici nás zajímá
+ * @param graphics {Graphic[]} seznam všech grafik
  * @returns {Graphic | undefined} Kterou grafiku jsme případně našli
  */
-export function detectGraphic(position : Position) : Graphic | undefined {
+export function detectGraphic(position : Position, graphics: Graphic[]) : Graphic | undefined {
     return graphics.find(g => 
         (g.boundingRect.x1 <= position.x && position.x <= g.boundingRect.x2) && 
         (g.boundingRect.y1 <= position.y && position.y <= g.boundingRect.y2))
@@ -54,21 +41,21 @@ export function createBarrier() : Graphic[]{
 /**
  * Překreslí celé plátno dle aktuálních grafik
  * @category Utils
+ * @param graphics {Graphic[]} seznam všech grafik pro vykreslení
+ * @param ctx {CanvasRenderingContext2D} context, který se má překresit
  */
-export function redraw(){
-    if (ctx){
-        ctx.clearRect(0,0,canvasSize.width, canvasSize.height);
-        graphics.forEach(g => g.draw())
-    }
+export function redraw(graphics: Graphic[], ctx: CanvasRenderingContext2D){
+    ctx.clearRect(0,0,canvasSize.width, canvasSize.height);
+    graphics.forEach(g => g.draw(ctx))
 }
 
 /**
  * Vykreslí ohraničení vybrané grafiky
  * @category Utils
  * @param graphic {Graphic} Grafika, která je vybrána
+ * @param ctx {CanvasRenderingContext2D} context, který se má překresit
  */
-export function drawSelected(graphic : Graphic){
-    if (ctx)
-        new Selected(graphic.position, graphic.size, ctx);
+export function drawSelected(graphic : Graphic, ctx: CanvasRenderingContext2D){
+    new Selected(graphic.position, graphic.size).draw(ctx);
 }
 

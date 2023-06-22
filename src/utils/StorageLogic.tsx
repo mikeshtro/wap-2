@@ -5,22 +5,21 @@
  */
 
 
-import { ctx, graphics, setGraphics } from "../components/Canvas";
 import { Finish } from "../models/Finish";
 import { Graphic } from "../models/Graphic";
 import { IGraphicSave } from "../models/IGraphic";
 import { Robot } from "../models/Robot";
 import { Wall } from "../models/Wall";
 import { GraphicType } from "../models/enums";
-import { redraw } from "./GraphicsLogic";
 import { Error, Success } from "./Messages";
 
 /**
  * Uloží veškerá data o mapě do slotu podle parametru
  * @category Utils
  * @param id {number} Číslo slotu
+ * @param graphics {Graphic[]} Seznam grafik k uložení
  */
-export function saveData(id : number){
+export function saveData(id : number, graphics: Graphic[]){
     const data : IGraphicSave[] = graphics.filter(g => g.type !== GraphicType.Selected).map(g => 
         {
             if (g instanceof Wall) {
@@ -41,31 +40,31 @@ export function saveData(id : number){
  * Načte veškerá data o mapě ze slotu podle parametru
  * @category Utils
  * @param id {number} Číslo slotu
+ * @returns Seznam načtených grafik
  */
-export function loadData(id : number){
+export function loadData(id : number): Graphic[] | undefined {
     const data = localStorage.getItem(id.toString());
     if (!data || data === ""){
         Error('Žádná data nejsou uložena!');
-        return;
+        return undefined;
     }
     const graphicsToSave = JSON.parse(data) as IGraphicSave[];
     let finalData : Graphic[] = [];
     graphicsToSave.forEach(g => {
         switch(g.type){
             case GraphicType.Wall:
-                finalData = [...finalData, new Wall(g.position, g.size ?? {width: 10, height: 10}, ctx ?? undefined)];
+                finalData = [...finalData, new Wall(g.position, g.size ?? {width: 10, height: 10})];
                 break;
             case GraphicType.Finish:
-                finalData = [...finalData, new Finish(g.position, ctx)];
+                finalData = [...finalData, new Finish(g.position)];
                 break;
             default:
-                finalData = [...finalData, new Robot(g.position, ctx, g.movementType)];
+                finalData = [...finalData, new Robot(g.position, g.movementType)];
                 break;
         }
     })
-    setGraphics(finalData);
-    redraw();
     Success('Mapa byla načtena.');
+    return finalData;
 }
 
 /**

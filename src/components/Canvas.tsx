@@ -21,13 +21,13 @@ import { isAllDone, simulateStep, someCollision, turning } from '../utils/Simula
  */
 interface canvasProps {
     /**
-     * Input - Trigger, který se provolá pokud nastane událost ke smazání grafiky
-     */
-    removeTrigger : boolean,
-    /**
      * Input - Drží aktuální vybranou operaci
      */
     operation: OperationType,
+    /**
+     * Input - Aktuálně vybraná grafika
+     */
+    selectedGraphic: Graphic | null;
     /**
      * Output - Uživatel vybral novou grafiku
      * @param graphic {Graphic | null} Vybraná grafika
@@ -51,6 +51,15 @@ interface canvasProps {
      * Input - Zvolený způsob pohybu nového robota
      */
     movementType: MovementType
+    /**
+     * Input - Veškerý seznam grafik
+     */
+    graphics : Graphic[];
+    /**
+     * Output - Setter pro globální seznam grafik
+     * @param g {Graphic[]} Grafiky, které mají být nastaveny
+     */
+    setGraphics(g : Graphic[]): void,
 }
 
 const ratio = 16/9;
@@ -63,30 +72,15 @@ const width = Math.min(1200, window.innerWidth - 30);
 export const canvasSize : Size = {width: width, height: width/ratio};
 
 /**
- * Veškerý seznam grafik
- * @type Graphic[]
- */
-export let graphics : Graphic[] = [];
-
-/**
- * Setter pro globální seznam grafik
- * @param g {Graphic[]} Grafiky, které mají být nastaveny
- */
-export function setGraphics(g : Graphic[]){
-    graphics = g;
-}
-
-/**
  * Kontext pro kreslení na plátno
  * @type CanvasRenderingContext2D
  */
-export let ctx : CanvasRenderingContext2D;
+let ctx : CanvasRenderingContext2D;
 
 const keys = ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"]
 
 let playStatus = false;
 let dragStartPosition : Position | null = null;
-let selectedGraphic : Graphic | null = null;
 
 /**
  * Komponenta Canvas
@@ -94,7 +88,7 @@ let selectedGraphic : Graphic | null = null;
  * @param props {canvasProps} 
  * @returns {ReactElement}
  */
-export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, status, setStatus, movementType} : canvasProps) => {
+export const Canvas = ({ operation, selectedGraphic, callSelected, selectedSize, status, setStatus, movementType, graphics, setGraphics} : canvasProps) => {
     const [cursor, setCursor] = useState("default");
     const canvas = React.useRef<HTMLCanvasElement | null>(null);     
 
@@ -108,24 +102,28 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
         const _ctx = canvas.current?.getContext('2d');
         if (_ctx){
             ctx = _ctx;
-            graphics = createBarrier();
+            let newGraphics = createBarrier();
+            setGraphics(newGraphics);
         }
         window.addEventListener('keydown', handler, false);
     }, [canvas])
 
     /**
      * Po vyvolání removeTrigger se vybraná grafika smaže
+     * TODO: fix comment
      * @exports Canvas
      * @function removeTrigger
      */
     useEffect(() => {
-        if (!selectedGraphic) return;
-        graphics.splice(graphics.indexOf(selectedGraphic), 1);
-        redraw();
-        selectedGraphic = null;
-        callSelected(null);
-    // eslint-disable-next-line
-    },[removeTrigger]);
+        redraw(graphics, ctx);
+    }, [graphics]);
+
+    // TODO: comment
+    useEffect(() => {
+        if (selectedGraphic != null) {
+            drawSelected(selectedGraphic, ctx);
+        }
+    }, [selectedGraphic])
     
     /**
      * Po změně statusu simulace se simulace buď spustí nebo zastaví
@@ -162,7 +160,8 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
      */
     function handler(e: KeyboardEvent){
         if (playStatus && keys.some(k => k === e.key)) {
-            turning(e.key);
+            const newGraphics = turning(e.key, graphics);
+            setGraphics(newGraphics);
         }
     };
 
@@ -173,16 +172,16 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
      */
     async function simulate(){
         if (!correct()) return;
-        if (someCollision()){
+        if (someCollision(graphics)){
             Warning('Výchozí pozice robota koliduje se zdí.');
         }
-        while (!isAllDone() && playStatus){
-            graphics = simulateStep();
-            redraw();
+        while (!isAllDone(graphics) && playStatus){
+            const newGraphics = simulateStep(graphics);
+            setGraphics(newGraphics);
             await new Promise(res => setTimeout(res, 25));
         }
         //finished
-        if (isAllDone()){
+        if (isAllDone(graphics)){
             setStatus(false);
             Success('Všichni roboti dotazili do cíle.')
         }
@@ -227,7 +226,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
      */
     function onClick(e : React.MouseEvent){
         const position = getPosition(e);
-        if (!ctx) return;
+        let newGraphics = graphics;
         switch (operation){
             case OperationType.Cursor:
                 selectGraphic(position);
@@ -237,15 +236,16 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
                     Error('Zeď musí mít minimální výšku a šířku 10');
                     return;
                 } 
-                graphics = [...graphics, new Wall(position, selectedSize, ctx)];
+                newGraphics = [...newGraphics, new Wall(position, selectedSize)];
                 break;
             case OperationType.Finish:
-                graphics = [...graphics, new Finish(position, ctx)];
+                newGraphics = [...newGraphics, new Finish(position)];
                 break;
             default:
-                graphics = [...graphics, new Robot(position, ctx, movementType)];
+                newGraphics = [...newGraphics, new Robot(position, movementType)];
                 break;
         }     
+        setGraphics(newGraphics);
     }
 
     /**
@@ -257,7 +257,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
     function dragMouseDown(e : React.MouseEvent){
         if(operation !== OperationType.Cursor || !selectedGraphic) return;
         const position = getPosition(e)
-        if (detectGraphic(position) === selectedGraphic) {
+        if (detectGraphic(position, graphics) === selectedGraphic) {
             dragStartPosition = position;
             setCursor("move");
         }
@@ -279,6 +279,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
             x: selectedGraphic.position.x + position.x - dragStartPosition.x, 
             y: selectedGraphic.position.y + position.y - dragStartPosition.y
         };
+        // TODO: toto mozna nebude fungovat
         selectedGraphic.position = newPosition;
         selectedGraphic.recalculateBoundingRect();
         graphics = [...graphics, selectedGraphic];
@@ -291,8 +292,7 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
      * @function unselectGraphic
      */
     function unselectGraphic(){
-        selectedGraphic = null;
-        redraw();
+        redraw(graphics, ctx);
         callSelected(null);
     }
 
@@ -305,12 +305,8 @@ export const Canvas = ({removeTrigger, operation, callSelected, selectedSize, st
     function selectGraphic(position : Position){
         unselectGraphic();
         if (playStatus) return;
-        const selected = detectGraphic(position);
+        const selected = detectGraphic(position, graphics);
         callSelected(selected ?? null);
-        if (selected){
-            selectedGraphic = selected;
-            drawSelected(selectedGraphic);
-        }
     }
 
     return (

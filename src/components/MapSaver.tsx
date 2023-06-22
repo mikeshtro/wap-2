@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { exist, loadData, removeData, saveData } from "../utils/StorageLogic"
 import { FaMapMarkedAlt } from 'react-icons/fa';
 import { Button, ButtonGroup, Card, Modal } from 'react-bootstrap';
+import { Graphic } from '../models/Graphic';
 
 /**
  * Rozhraní jednotlivých vstupů a výstupů komponenty MapSaver
@@ -15,10 +16,14 @@ import { Button, ButtonGroup, Card, Modal } from 'react-bootstrap';
  */
 interface mapSaverProps {
     /**
+     * Input - aktuální seznam grafik
+     */
+    graphics: Graphic[];
+    /**
      * Output - Uživatel načetl vybranou mapu
      * @returns {void}
      */
-    loaded() : void;
+    setLoadedGraphics(graphics: Graphic[]) : void;
 }
 
 const ids = [1,2,3,4,5];
@@ -29,7 +34,7 @@ const ids = [1,2,3,4,5];
  * @param props {mapSaverProps} 
  * @returns {ReactElement}
  */
-export const MapSaver = ({loaded} : mapSaverProps) => {
+export const MapSaver = ({graphics, setLoadedGraphics} : mapSaverProps) => {
     const [visible, setVisible] = useState<boolean>(false);
     const [exists, setExists] = useState<boolean[]>([false,false,false,false,false]);
 
@@ -59,7 +64,7 @@ export const MapSaver = ({loaded} : mapSaverProps) => {
      * @param index {number} Vybraný slot
      */
     function saveMap(index : number){
-        saveData(index);
+        saveData(index, graphics);
         getOccupied();
     }
 
@@ -70,9 +75,11 @@ export const MapSaver = ({loaded} : mapSaverProps) => {
      * @param index {number} Vybraný slot
      */
     function loadMap(index : number){
-        loadData(index);
-        setVisible(false);
-        loaded();
+        const loadedGraphics = loadData(index);
+        if (loadedGraphics != null) {
+            setVisible(false);
+            setLoadedGraphics(loadedGraphics);
+        }
     }
 
     /**

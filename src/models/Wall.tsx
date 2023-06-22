@@ -8,25 +8,22 @@ export class Wall extends Graphic {
     * @constructs
     * @param position {Position} Pozice kam vložit grafiku
     * @param size {Size} Velikost grafiky
-    * @param ctx {CanvasRenderingContext2D | undefined} Kontext plátna pro vykreslení
     * 
     * @category Models
     * @extends Graphic
     * @classdesc Grafika znázorňující stěnu
     */
-    constructor(position : Position, size : Size, ctx: CanvasRenderingContext2D | undefined = undefined){
-        super(position, size, GraphicType.Wall, ctx);
-        this.draw();
+    constructor(position : Position, size : Size){
+        super(position, size, GraphicType.Wall);
     }
 
     /**
      * Vykreslí daný objekt na plátno
      * @returns {void}
      */
-    draw(){
-        if (!this.ctx) return;
-        this.ctx.fillStyle = "#202124";
-        this.ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
+    draw(ctx: CanvasRenderingContext2D){
+        ctx.fillStyle = "#202124";
+        ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height);
     }
 
     /**
